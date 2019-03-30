@@ -5,7 +5,7 @@ package com.zdl.spider.mixed.zhihu;
  */
 public class zhihuConst {
 
-    public static final String ZHIHU_ADDRESS = "https://www.zhihu.com";
+    public static final String ZHIHU_ADDRESS = "https://www.zhihu.com/";
     public static final String QUESTION = "question";
     public static final String ANSWER = "answer";
 

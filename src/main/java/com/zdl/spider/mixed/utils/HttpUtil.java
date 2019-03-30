@@ -12,10 +12,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import static com.zdl.spider.mixed.utils.HttpConst.HTTP_HREDER_AGENT;
-import static com.zdl.spider.mixed.utils.HttpConst.HTTP_HREDER_AGENT_CONTENT;
+import static com.zdl.spider.mixed.utils.HttpConst.AGENT;
+import static com.zdl.spider.mixed.utils.HttpConst.AGENT_CONTENT;
 
 /**
  * http相关工具类
@@ -75,11 +76,11 @@ public final class HttpUtil {
                 .join();
     }
 
-    public static <U> U get(String url, Function<String, U> apply) {
+    public static <U> CompletableFuture<U> get(String url, String[] headers, Function<String, U> apply) {
 
         var r = HttpRequest.newBuilder(URI.create(url))
                 .timeout(Duration.ofMillis(CONNECTION_TIME_OUT))
-                .headers(HTTP_HREDER_AGENT, HTTP_HREDER_AGENT_CONTENT)
+                .headers(headers)
                 .build();
 
         return HttpClient.newHttpClient()
@@ -89,7 +90,6 @@ public final class HttpUtil {
                 .exceptionally(e -> {
                     logger.error(e.getMessage(), e);
                     return null;
-                })
-                .join();
+                });
     }
 }
