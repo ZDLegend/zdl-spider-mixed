@@ -14,8 +14,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.zdl.spider.mixed.utils.HttpConst.*;
-import static com.zdl.spider.mixed.zhihu.zhihuConst.ZHIHU_ADDRESS;
+import static com.zdl.spider.mixed.zhihu.ZhihuConst.ZHIHU_ADDRESS;
+import static com.zdl.spider.mixed.zhihu.ZhihuConst.getJsonHeaders;
 
 /**
  * the search spider of zhihu
@@ -24,7 +24,7 @@ import static com.zdl.spider.mixed.zhihu.zhihuConst.ZHIHU_ADDRESS;
  */
 public class Search {
 
-    private static Logger logger = LoggerFactory.getLogger(Search.class);
+    private static final Logger logger = LoggerFactory.getLogger(Search.class);
 
     private static final String SEARCH_API = ZHIHU_ADDRESS + "api/v4/search_v3?t=general&q=%s&correction=1&offset=%d&limit=%d";
 
@@ -45,47 +45,14 @@ public class Search {
      */
     private static <U> CompletableFuture<U> execute(String q, int offset, int limit, Function<String, U> call){
         String url = String.format(SEARCH_API, q, offset, limit);
-        return HttpUtil.get(url, getHeaders(), call);
+        return HttpUtil.get(url, getJsonHeaders(), call);
     }
 
     /**
      * get search result for json
      */
     public static CompletableFuture<JSONObject> getContentForJson(String q, int offset, int limit) {
-        return execute(q, offset, limit, Search::paresContent);
-    }
-
-    /**
-     * get question list by search result
-     */
-    public static CompletableFuture<List<QuestionEntity>> getQuestionList(String q, int offset, int limit) {
-        return getContentForJson(q, offset, limit).thenApply(Search::paresQuestionJson);
-    }
-
-    private static JSONObject paresContent(String content){
-        return JSON.parseObject(content);
-    }
-
-    private static List<QuestionEntity> paresQuestionJson(JSONObject json){
-        if(json.containsKey("data")) {
-            return json.getJSONArray("data")
-                    .stream()
-                    .map(o -> (JSONObject)o)
-                    .filter(j -> j.containsKey("object") && j.containsKey("type") && j.getString("type").equals("search_result"))
-                    .map(j -> j.getJSONObject("object"))
-                    .filter(j -> j.containsKey("question"))
-                    .map(j -> JSONObject.parseObject(j.getString("question"), QuestionEntity.class))
-                    .peek(q -> q.setName(q.getName().replace("<em>", "").replace("</em>", "")))
-                    .distinct()
-                    .collect(Collectors.toList());
-        }
-
-        logger.error("search result do not have 'data' int json:{}", json);
-        return new ArrayList<>();
-    }
-
-    private static String[] getHeaders(){
-        return new String[]{AGENT, AGENT_CONTENT, ACCEPT, ACCEPT_JSON};
+        return execute(q, offset, limit, ZhihuConst::paresContent);
     }
 
     public static Search execute(String q, int offset, int limit){
