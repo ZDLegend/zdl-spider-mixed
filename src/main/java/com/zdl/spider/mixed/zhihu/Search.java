@@ -66,12 +66,11 @@ public class Search {
             return json.getJSONArray("data")
                     .stream()
                     .map(o -> (JSONObject)o)
-                    .filter(j -> j.containsKey("type") && j.getString("type").equals("search_result"))
-                    .filter(j -> j.containsKey("object"))
+                    .filter(j -> j.containsKey("object") && j.containsKey("type") && j.getString("type").equals("search_result"))
                     .map(j -> j.getJSONObject("object"))
                     .filter(j -> j.containsKey("question"))
-                    .map(j -> j.getString("question"))
-                    .map(s -> JSONObject.parseObject(s, QuestionEntity.class))
+                    .map(j -> JSONObject.parseObject(j.getString("question"), QuestionEntity.class))
+                    .peek(q -> q.setName(q.getName().replace("<em>", "").replace("</em>", "")))
                     .distinct()
                     .collect(Collectors.toList());
         }
@@ -81,6 +80,11 @@ public class Search {
     }
 
     private String[] getHeaders(){
-        return new String[]{AGENT, AGENT_CONTENT, ACCEPT_CONTENT, ACCEPT_JSON};
+        return new String[]{AGENT, AGENT_CONTENT, ACCEPT, ACCEPT_JSON};
+    }
+
+    public static void main(String[] args) {
+        List<QuestionEntity> list = new Search().getQuestionList("体验", 0, 20).join();
+        logger.debug("{}", list);
     }
 }

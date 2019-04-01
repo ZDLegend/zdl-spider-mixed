@@ -66,4 +66,14 @@ public class QuestionEntity {
                 .append(id)
                 .toHashCode();
     }
+
+    @Override
+    public String toString() {
+        return "QuestionEntity{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                ", name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                '}';
+    }
 }
