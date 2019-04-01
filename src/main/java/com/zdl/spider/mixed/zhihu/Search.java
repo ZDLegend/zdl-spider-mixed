@@ -1,6 +1,7 @@
 package com.zdl.spider.mixed.zhihu;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.zhihu.entity.QuestionEntity;
@@ -27,6 +28,9 @@ public class Search {
 
     private static final String SEARCH_API = ZHIHU_ADDRESS + "api/v4/search_v3?t=general&q=%s&correction=1&offset=%d&limit=%d";
 
+    private Page page;
+    private List<JSONObject> content;
+
     /**
      * async execute search task
      *
@@ -37,7 +41,7 @@ public class Search {
      * @param <U> trans type
      * @return the result of searching by future
      */
-    private <U> CompletableFuture<U> execute(String q, int offset, int limit, Function<String, U> call){
+    private static <U> CompletableFuture<U> execute(String q, int offset, int limit, Function<String, U> call){
         String url = String.format(SEARCH_API, q, offset, limit);
         return HttpUtil.get(url, getHeaders(), call);
     }
@@ -45,23 +49,22 @@ public class Search {
     /**
      * get search result for json
      */
-    public  CompletableFuture<JSONObject> getContentForJson(String q, int offset, int limit) {
-        return execute(q, offset, limit, this::paresContent);
+    public static CompletableFuture<JSONObject> getContentForJson(String q, int offset, int limit) {
+        return execute(q, offset, limit, Search::paresContent);
     }
 
     /**
      * get question list by search result
      */
-    public  CompletableFuture<List<QuestionEntity>> getQuestionList(String q, int offset, int limit) {
-        return execute(q, offset, limit, this::paresContent).thenApply(this::paresQuestionJson);
+    public static CompletableFuture<List<QuestionEntity>> getQuestionList(String q, int offset, int limit) {
+        return getContentForJson(q, offset, limit).thenApply(Search::paresQuestionJson);
     }
 
-    private JSONObject paresContent(String content){
+    private static JSONObject paresContent(String content){
         return JSON.parseObject(content);
     }
 
-    private List<QuestionEntity> paresQuestionJson(JSONObject json){
-
+    private static List<QuestionEntity> paresQuestionJson(JSONObject json){
         if(json.containsKey("data")) {
             return json.getJSONArray("data")
                     .stream()
@@ -79,8 +82,20 @@ public class Search {
         return new ArrayList<>();
     }
 
-    private String[] getHeaders(){
+    private static String[] getHeaders(){
         return new String[]{AGENT, AGENT_CONTENT, ACCEPT, ACCEPT_JSON};
+    }
+
+    public static Search execute(String q, int offset, int limit){
+        Search search = new Search();
+        JSONObject json = getContentForJson(q, offset, limit).join();
+        search.page = JSONObject.parseObject(json.getString("paging"), Page.class);
+        search.content = json.getJSONArray("data").stream().map(o -> (JSONObject)o) .collect(Collectors.toList());
+        return search;
+    }
+
+    public List<JSONObject> content() {
+        return this.content;
     }
 
     public static void main(String[] args) {
