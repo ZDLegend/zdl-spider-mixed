@@ -15,9 +15,6 @@ import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
-import static com.zdl.spider.mixed.utils.HttpConst.AGENT;
-import static com.zdl.spider.mixed.utils.HttpConst.AGENT_CONTENT;
-
 /**
  * http相关工具类
  * <p>

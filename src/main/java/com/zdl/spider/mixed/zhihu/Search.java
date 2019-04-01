@@ -1,6 +1,5 @@
 package com.zdl.spider.mixed.zhihu;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.zhihu.entity.AuthorEntity;
@@ -8,7 +7,6 @@ import com.zdl.spider.mixed.zhihu.entity.QuestionEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -19,7 +17,7 @@ import static com.zdl.spider.mixed.zhihu.ZhihuConst.getJsonHeaders;
 
 /**
  * the search spider of zhihu
- *
+ * <p>
  * Created by ZDLegend on 2019/3/30 14:25
  */
 public class Search {
@@ -36,14 +34,14 @@ public class Search {
     /**
      * async execute search task
      *
-     * @param q need to search for content
+     * @param q      need to search for content
      * @param offset offset
-     * @param limit limit (At least 20)
-     * @param call result call back
-     * @param <U> trans type
+     * @param limit  limit (At least 20)
+     * @param call   result call back
+     * @param <U>    trans type
      * @return the result of searching by future
      */
-    private static <U> CompletableFuture<U> execute(String q, int offset, int limit, Function<String, U> call){
+    private static <U> CompletableFuture<U> execute(String q, int offset, int limit, Function<String, U> call) {
         String url = String.format(SEARCH_API, q, offset, limit);
         return HttpUtil.get(url, getJsonHeaders(), call);
     }
@@ -55,12 +53,12 @@ public class Search {
         return execute(q, offset, limit, ZhihuConst::paresContent);
     }
 
-    public static Search execute(String q, int offset, int limit){
+    public static Search execute(String q, int offset, int limit) {
         var search = new Search();
         var json = getContentForJson(q, offset, limit).join();
         search.page = JSONObject.parseObject(json.getString("paging"), Page.class);
         search.content = json.getJSONArray("data").stream()
-                .map(o -> (JSONObject)o)
+                .map(o -> (JSONObject) o)
                 .collect(Collectors.toList());
 
         search.questions = search.content.stream()

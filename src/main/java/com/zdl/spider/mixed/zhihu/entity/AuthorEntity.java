@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * 知乎作者对象
- *
+ * <p>
  * Created by ZDLegend on 2019/3/30 17:15
  */
 public class AuthorEntity {

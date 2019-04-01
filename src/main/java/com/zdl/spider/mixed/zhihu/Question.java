@@ -33,7 +33,7 @@ public class Question {
 
         Question question = new Question();
         question.page = JSONObject.parseObject(json.getString("paging"), Page.class);
-        question.content = json.getJSONArray("data").stream().map(o -> (JSONObject)o).collect(Collectors.toList());
+        question.content = json.getJSONArray("data").stream().map(o -> (JSONObject) o).collect(Collectors.toList());
 
         return question;
     }

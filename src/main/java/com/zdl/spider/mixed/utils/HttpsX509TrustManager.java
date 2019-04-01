@@ -13,13 +13,13 @@ import java.security.cert.X509Certificate;
 
 /**
  * 证书信任管理器
- *
+ * <p>
  * Created by ZDLegend on 2019/3/29 10:13
  */
 public class HttpsX509TrustManager implements X509TrustManager {
 
     public static SSLContext buildTrustSSLContext() throws NoSuchProviderException, NoSuchAlgorithmException, KeyManagementException {
-        TrustManager[] tm = { new HttpsX509TrustManager() };
+        TrustManager[] tm = {new HttpsX509TrustManager()};
         SSLContext sslContext = SSLContext.getInstance("TLSv1.2", "SunJSSE");
         sslContext.init(null, tm, new SecureRandom());
         return sslContext;
@@ -31,7 +31,8 @@ public class HttpsX509TrustManager implements X509TrustManager {
                 .build();
     }
 
-    private HttpsX509TrustManager(){}
+    private HttpsX509TrustManager() {
+    }
 
     @Override
     public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {

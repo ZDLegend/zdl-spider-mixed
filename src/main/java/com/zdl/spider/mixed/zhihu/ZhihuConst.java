@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import static com.zdl.spider.mixed.utils.HttpConst.*;
-import static com.zdl.spider.mixed.utils.HttpConst.ACCEPT_JSON;
 
 /**
  * Created by ZDLegend on 2019/3/29 16:34
@@ -15,11 +14,11 @@ public class ZhihuConst {
     public static final String QUESTION = "question";
     public static final String ANSWER = "answer";
 
-    public static String[] getJsonHeaders(){
+    public static String[] getJsonHeaders() {
         return new String[]{AGENT, AGENT_CONTENT, ACCEPT, ACCEPT_JSON};
     }
 
-    public static JSONObject paresContent(String content){
+    public static JSONObject paresContent(String content) {
         return JSON.parseObject(content);
     }
 
