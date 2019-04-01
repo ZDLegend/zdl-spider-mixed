@@ -1,9 +1,9 @@
 package com.zdl.spider.mixed.zhihu;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
+import com.zdl.spider.mixed.zhihu.entity.AuthorEntity;
 import com.zdl.spider.mixed.zhihu.entity.QuestionEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +30,8 @@ public class Search {
 
     private Page page;
     private List<JSONObject> content;
+    private List<QuestionEntity> questions;
+    private List<AuthorEntity> authors;
 
     /**
      * async execute search task
@@ -87,10 +89,30 @@ public class Search {
     }
 
     public static Search execute(String q, int offset, int limit){
-        Search search = new Search();
-        JSONObject json = getContentForJson(q, offset, limit).join();
+        var search = new Search();
+        var json = getContentForJson(q, offset, limit).join();
         search.page = JSONObject.parseObject(json.getString("paging"), Page.class);
-        search.content = json.getJSONArray("data").stream().map(o -> (JSONObject)o) .collect(Collectors.toList());
+        search.content = json.getJSONArray("data").stream()
+                .map(o -> (JSONObject)o)
+                .collect(Collectors.toList());
+
+        search.questions = search.content.stream()
+                .filter(j -> j.containsKey("object") && j.containsKey("type") && j.getString("type").equals("search_result"))
+                .map(j -> j.getJSONObject("object"))
+                .filter(j -> j.containsKey("question"))
+                .map(j -> JSONObject.parseObject(j.getString("question"), QuestionEntity.class))
+                .peek(qu -> qu.setName(qu.getName().replace("<em>", "").replace("</em>", "")))
+                .distinct()
+                .collect(Collectors.toList());
+
+        search.authors = search.content.stream()
+                .filter(j -> j.containsKey("object") && j.containsKey("type") && j.getString("type").equals("search_result"))
+                .map(j -> j.getJSONObject("object"))
+                .filter(j -> j.containsKey("authors"))
+                .map(j -> JSONObject.parseObject(j.getString("author"), AuthorEntity.class))
+                .distinct()
+                .collect(Collectors.toList());
+
         return search;
     }
 
@@ -98,8 +120,20 @@ public class Search {
         return this.content;
     }
 
+    public Page page() {
+        return page;
+    }
+
+    public List<QuestionEntity> questions() {
+        return questions;
+    }
+
+    public List<AuthorEntity> authors() {
+        return authors;
+    }
+
     public static void main(String[] args) {
-        List<QuestionEntity> list = new Search().getQuestionList("体验", 0, 20).join();
-        logger.debug("{}", list);
+        Search search = Search.execute("体验", 0, 20);
+        logger.debug("{}", search);
     }
 }

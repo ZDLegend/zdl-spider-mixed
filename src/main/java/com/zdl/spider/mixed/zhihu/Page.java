@@ -6,7 +6,10 @@ package com.zdl.spider.mixed.zhihu;
 public class Page {
 
     private boolean isEnd;
+    private boolean isStart;
     private String next;
+    private String previous;
+    private int totals;
 
     public boolean isEnd() {
         return isEnd;
@@ -22,5 +25,29 @@ public class Page {
 
     public void setNext(String next) {
         this.next = next;
+    }
+
+    public boolean isStart() {
+        return isStart;
+    }
+
+    public void setStart(boolean start) {
+        isStart = start;
+    }
+
+    public String getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(String previous) {
+        this.previous = previous;
+    }
+
+    public int getTotals() {
+        return totals;
+    }
+
+    public void setTotals(int totals) {
+        this.totals = totals;
     }
 }
