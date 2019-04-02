@@ -2,6 +2,7 @@ package com.zdl.spider.mixed.zhihu;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
+import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
 import com.zdl.spider.mixed.zhihu.entity.AuthorEntity;
 import com.zdl.spider.mixed.zhihu.entity.QuestionEntity;
 import org.slf4j.Logger;
@@ -27,9 +28,7 @@ public class Search {
     private static final String SEARCH_API = ZHIHU_ADDRESS + "api/v4/search_v3?t=general&q=%s&correction=1&offset=%d&limit=%d";
 
     private Page page;
-    private List<JSONObject> content;
-    private List<QuestionEntity> questions;
-    private List<AuthorEntity> authors;
+    private List<AnswerEntity> answers;
 
     /**
      * async execute search task
@@ -57,44 +56,21 @@ public class Search {
         var search = new Search();
         var json = getContentForJson(q, offset, limit).join();
         search.page = JSONObject.parseObject(json.getString("paging"), Page.class);
-        search.content = json.getJSONArray("data").stream()
+        search.answers = json.getJSONArray("data")
+                .stream()
                 .map(o -> (JSONObject) o)
-                .collect(Collectors.toList());
-
-        search.questions = search.content.stream()
-                .filter(j -> j.containsKey("object") && j.containsKey("type") && j.getString("type").equals("search_result"))
-                .map(j -> j.getJSONObject("object"))
-                .filter(j -> j.containsKey("question"))
-                .map(j -> JSONObject.parseObject(j.getString("question"), QuestionEntity.class))
-                .peek(qu -> qu.setName(qu.getName().replace("<em>", "").replace("</em>", "")))
-                .distinct()
-                .collect(Collectors.toList());
-
-        search.authors = search.content.stream()
-                .filter(j -> j.containsKey("object") && j.containsKey("type") && j.getString("type").equals("search_result"))
-                .map(j -> j.getJSONObject("object"))
-                .filter(j -> j.containsKey("authors"))
-                .map(j -> JSONObject.parseObject(j.getString("author"), AuthorEntity.class))
-                .distinct()
+                .map(j -> JSONObject.parseObject(j.toJSONString(), AnswerEntity.class))
                 .collect(Collectors.toList());
 
         return search;
     }
 
-    public List<JSONObject> content() {
-        return this.content;
+    public List<AnswerEntity> answers() {
+        return this.answers;
     }
 
     public Page page() {
         return page;
-    }
-
-    public List<QuestionEntity> questions() {
-        return questions;
-    }
-
-    public List<AuthorEntity> authors() {
-        return authors;
     }
 
     public static void main(String[] args) {

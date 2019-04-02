@@ -12,8 +12,12 @@ public class QuestionEntity {
 
     private String id;
     private String type;
+    private String questionType;
     private String name;
+    private String title;
     private String url;
+    private long createdTime;
+    private long updatedTime;
 
     public String getId() {
         return id;
@@ -45,6 +49,38 @@ public class QuestionEntity {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(long createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public long getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(long updatedTime) {
+        this.updatedTime = updatedTime;
     }
 
     @Override

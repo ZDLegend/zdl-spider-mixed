@@ -2,6 +2,7 @@ package com.zdl.spider.mixed.zhihu;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
+import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +25,7 @@ public class Question {
 
     private Page page;
 
-    private List<JSONObject> content;
+    private List<AnswerEntity> answers;
 
     public static Question execute(String q, int offset, int limit) {
         String url = String.format(QUESTION_API, q, INCLUDE, limit, offset);
@@ -33,13 +34,17 @@ public class Question {
 
         Question question = new Question();
         question.page = JSONObject.parseObject(json.getString("paging"), Page.class);
-        question.content = json.getJSONArray("data").stream().map(o -> (JSONObject) o).collect(Collectors.toList());
+        question.answers = json.getJSONArray("data")
+                .stream()
+                .map(o -> (JSONObject) o)
+                .map(j -> JSONObject.parseObject(j.toJSONString(), AnswerEntity.class))
+                .collect(Collectors.toList());
 
         return question;
     }
 
-    public List<JSONObject> content() {
-        return this.content;
+    public List<AnswerEntity> answers() {
+        return this.answers;
     }
 
     public Page page() {
