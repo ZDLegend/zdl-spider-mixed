@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 public class JsoupUtil {
 
-    public static List<String> getImageAddrByHtml(String html){
+    public static List<String> getImageAddrByHtml(String html) {
         Document doc = Jsoup.parseBodyFragment(html);
         Element body = doc.body();
         Elements getDiv = body.getElementsByTag("img");

@@ -11,8 +11,6 @@ import static com.zdl.spider.mixed.utils.HttpConst.*;
 public class ZhihuConst {
 
     public static final String ZHIHU_ADDRESS = "https://www.zhihu.com/";
-    public static final String QUESTION = "question";
-    public static final String ANSWER = "answer";
 
     public static String[] getJsonHeaders() {
         return new String[]{AGENT, AGENT_CONTENT, ACCEPT, ACCEPT_JSON};

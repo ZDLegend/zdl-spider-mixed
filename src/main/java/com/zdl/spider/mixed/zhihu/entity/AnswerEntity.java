@@ -2,7 +2,7 @@ package com.zdl.spider.mixed.zhihu.entity;
 
 /**
  * 知乎回答对象
- *
+ * <p>
  * Created by ZDLegend on 2019/4/2 17:25
  */
 public class AnswerEntity {
