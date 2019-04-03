@@ -1,8 +1,10 @@
-package com.zdl.spider.mixed.zhihu;
+package com.zdl.spider.mixed.zhihu.parser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.ClassUtil;
 import com.zdl.spider.mixed.utils.HttpUtil;
+import com.zdl.spider.mixed.zhihu.Page;
+import com.zdl.spider.mixed.zhihu.ZhihuConst;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

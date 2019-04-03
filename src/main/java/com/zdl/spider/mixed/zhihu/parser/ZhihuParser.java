@@ -1,4 +1,6 @@
-package com.zdl.spider.mixed.zhihu;
+package com.zdl.spider.mixed.zhihu.parser;
+
+import com.zdl.spider.mixed.zhihu.Page;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

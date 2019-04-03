@@ -1,4 +1,4 @@
-package com.zdl.spider.mixed.zhihu;
+package com.zdl.spider.mixed.zhihu.parser;
 
 import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
 import org.slf4j.Logger;
