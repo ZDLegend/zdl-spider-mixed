@@ -33,7 +33,7 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
 
     @Override
     public CompletableFuture<ZhihuParser<T>> execute(String q, int offset, int limit) {
-        String url = url(q, offset, limit);
+        var url = url(q, offset, limit);
         return HttpUtil.get(url, getJsonHeaders(), ZhihuConst::paresContent)
                 .thenApply(json -> parser(this, json));
     }

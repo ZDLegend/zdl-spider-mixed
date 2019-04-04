@@ -15,7 +15,7 @@ public interface ZhihuParser<T> {
     /**
      * async execute zhihu parser task
      *
-     * @param q      need to search for contents
+     * @param q      contents
      * @param offset offset
      * @param limit  limit
      * @return the result of searching by future

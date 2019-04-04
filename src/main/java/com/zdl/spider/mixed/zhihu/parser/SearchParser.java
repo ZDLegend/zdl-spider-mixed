@@ -19,13 +19,13 @@ public class SearchParser extends AbstractZhihuParser<AnswerEntity> {
 
     @Override
     public String url(String q, int offset, int limit) {
-        String url = String.format(SEARCH_API, q, offset, limit);
+        var url = String.format(SEARCH_API, q, offset, limit);
         logger.debug("Search Parser url:{}", url);
         return url;
     }
 
     public static void main(String[] args) {
-        ZhihuParser search = new SearchParser().execute("体验", 0, 20).join();
+        var search = new SearchParser().execute("体验", 0, 20).join();
         logger.debug("{}", search);
     }
 }
