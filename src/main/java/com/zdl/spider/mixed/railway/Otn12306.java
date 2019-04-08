@@ -58,7 +58,7 @@ public class Otn12306 extends Thread {
 
     public void http(HttpClient httpClient) throws ExecutionException, InterruptedException {
 
-        HttpRequest request = HttpRequest.newBuilder()
+        var request = HttpRequest.newBuilder()
                 .uri(URI.create("https://kyfw.12306.cn/otn/leftTicket/queryZ?leftTicketDTO.train_date="
                         + date + "&leftTicketDTO.from_station=" + from + "&leftTicketDTO.to_station=" + to + "&purpose_codes=ADULT"))
                 .header("X-Requested-With", "XMLHttpRequest")
@@ -82,13 +82,13 @@ public class Otn12306 extends Thread {
             return;
         }
 
-        JSONObject json = JSON.parseObject(s);
+        var json = JSON.parseObject(s);
         if(json == null){
             logger.error(s);
             return;
         }
 
-        JSONObject data = json.getJSONObject("data");
+        var data = json.getJSONObject("data");
         if(data != null){
             JSONArray array = data.getJSONArray("result");
             array.stream().filter(o -> String.valueOf(o).contains(rail)).findFirst().ifPresent(o1 -> {
@@ -101,17 +101,13 @@ public class Otn12306 extends Thread {
 
     public String check(List<String> list){
 
-        String shangwu = list.get(30);
-        String yideng = list.get(31);
-        String erdeng = list.get(32);
+        var secondClass = getTicketNum(list.get(30));
+        var firstClass = getTicketNum(list.get(31));
+        var commerce = getTicketNum(list.get(32));
 
-        int biss = getTicketNum(shangwu);
-        int first = getTicketNum(yideng);
-        int second = getTicketNum(erdeng);
+        var result = "二等座（" + secondClass + "), 一等座（" + firstClass + "), 商务（" + commerce + ")";
 
-        String result = "二等座（" + biss + "), 一等座（" + first + "), 商务（" + second + ")";
-
-        if(biss > 0){
+        if(secondClass > 0){
             jump(result);
         }
 
