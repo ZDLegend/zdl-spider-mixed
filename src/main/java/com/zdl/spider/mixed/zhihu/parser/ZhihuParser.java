@@ -1,9 +1,14 @@
 package com.zdl.spider.mixed.zhihu.parser;
 
+import com.alibaba.fastjson.JSONObject;
+import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.zhihu.Page;
+import com.zdl.spider.mixed.zhihu.ZhihuConst;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import static com.zdl.spider.mixed.zhihu.ZhihuConst.getJsonHeaders;
 
 /**
  * zhihu paging api parser
@@ -20,7 +25,16 @@ public interface ZhihuParser<T> {
      * @param limit  limit
      * @return the result of searching by future
      */
-    CompletableFuture<ZhihuParser<T>> execute(String q, int offset, int limit);
+    default CompletableFuture<ZhihuParser<T>> execute(String q, int offset, int limit) {
+        var url = url(q, offset, limit);
+        return HttpUtil.get(url, getJsonHeaders(), ZhihuConst::paresContent)
+                .thenApply(json -> parser(this, json));
+    }
+
+    /**
+     * parser data of json
+     */
+    ZhihuParser<T> parser(ZhihuParser<T> parser, JSONObject json);
 
     /**
      * format zhihu restful api

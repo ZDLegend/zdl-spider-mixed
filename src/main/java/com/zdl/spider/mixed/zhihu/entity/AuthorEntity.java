@@ -21,6 +21,10 @@ public class AuthorEntity {
     private String url;
     private String type;
     private String avatarUrl;
+    private int answerCount;
+    private int articlesCount;
+    private int followerCount;
+    private int voteupCount;
 
     public String getId() {
         return id;
@@ -108,6 +112,54 @@ public class AuthorEntity {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public Boolean getFollowed() {
+        return isFollowed;
+    }
+
+    public void setFollowed(Boolean followed) {
+        isFollowed = followed;
+    }
+
+    public Boolean getFollowing() {
+        return isFollowing;
+    }
+
+    public void setFollowing(Boolean following) {
+        isFollowing = following;
+    }
+
+    public int getAnswerCount() {
+        return answerCount;
+    }
+
+    public void setAnswerCount(int answerCount) {
+        this.answerCount = answerCount;
+    }
+
+    public int getArticlesCount() {
+        return articlesCount;
+    }
+
+    public void setArticlesCount(int articlesCount) {
+        this.articlesCount = articlesCount;
+    }
+
+    public int getFollowerCount() {
+        return followerCount;
+    }
+
+    public void setFollowerCount(int followerCount) {
+        this.followerCount = followerCount;
+    }
+
+    public int getVoteupCount() {
+        return voteupCount;
+    }
+
+    public void setVoteupCount(int voteupCount) {
+        this.voteupCount = voteupCount;
     }
 
     @Override
