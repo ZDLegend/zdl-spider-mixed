@@ -22,6 +22,7 @@ public class JsoupUtil {
         Elements getDiv = body.getElementsByTag("img");
         return getDiv.stream()
                 .map(element -> element.attr("src"))
+                .filter(s -> s.startsWith("http"))
                 .collect(Collectors.toList());
     }
 }

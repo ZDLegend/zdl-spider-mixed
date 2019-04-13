@@ -18,6 +18,14 @@ import java.util.function.Consumer;
  */
 public class ImageStrategy {
 
+    public static void main(String[] args) {
+        getImagesBySearch("一个人健身前和健身后有什么区别",
+                1,
+                5,
+                image -> image.directSave("C:\\Users\\zdlegend\\Pictures").join()
+        ).join();
+    }
+
     /**
      * 通过搜索获取图片
      *
@@ -25,8 +33,8 @@ public class ImageStrategy {
      * @param x       搜索深度
      * @param y       搜索结果深度
      */
-    public void getImagesBySearch(String content, int x, int y, Consumer<Image> action) {
-        new SearchParser().pagingParser(content, x, answerParser -> {
+    public static CompletableFuture<Void> getImagesBySearch(String content, int x, int y, Consumer<Image> action) {
+        return new SearchParser().pagingParser(content, x, answerParser -> {
             CompletableFuture[] futures = answerParser.contents()
                     .stream()
                     .map(answerEntity -> answerEntity.getQuestion().getId())
@@ -42,8 +50,8 @@ public class ImageStrategy {
      * @param content 搜索内容
      * @param x       搜索深度
      */
-    public void getImagesBySearch(String content, int x, Consumer<Image> action) {
-        new SearchParser().pagingParser(content, x,
+    public static CompletableFuture<Void> getImagesBySearch(String content, int x, Consumer<Image> action) {
+        return new SearchParser().pagingParser(content, x,
                 answerParser -> answerParser.contents()
                         .stream()
                         .flatMap(answer -> JsoupUtil.getImageAddrByHtml(answer.getContent()).stream().map(s -> Image.of(s, answer)))
@@ -57,8 +65,8 @@ public class ImageStrategy {
      * @param x       搜索深度
      * @param y       搜索结果深度
      */
-    public void getImagesByPeopleSearch(String content, int x, int y, Consumer<Image> action) {
-        new SearchPeopleParser().pagingParser(content, x, authorParser -> {
+    public static CompletableFuture<Void> getImagesByPeopleSearch(String content, int x, int y, Consumer<Image> action) {
+        return new SearchPeopleParser().pagingParser(content, x, authorParser -> {
             CompletableFuture[] futures = authorParser.contents()
                     .stream()
                     .map(AuthorEntity::getUrlToken)
@@ -73,7 +81,7 @@ public class ImageStrategy {
      *
      * @param questionId 问题id
      */
-    public CompletableFuture<Void> getImagesByQuestion(String questionId, int y, Consumer<Image> action) {
+    public static CompletableFuture<Void> getImagesByQuestion(String questionId, int y, Consumer<Image> action) {
         return new QuestionParser().pagingParser(questionId, y, parser -> parser.contents()
                 .stream()
                 .flatMap(answer -> JsoupUtil.getImageAddrByHtml(answer.getContent()).stream().map(s -> Image.of(s, answer)))
@@ -85,7 +93,7 @@ public class ImageStrategy {
      *
      * @param token 用户id
      */
-    public CompletableFuture<Void> getImagesByAuthor(String token, int y, Consumer<Image> action) {
+    public static CompletableFuture<Void> getImagesByAuthor(String token, int y, Consumer<Image> action) {
         return new PeopleAnswerParser().pagingParser(token, y, parser -> parser.contents()
                 .stream()
                 .flatMap(answer -> JsoupUtil.getImageAddrByHtml(answer.getContent()).stream().map(s -> Image.of(s, answer)))

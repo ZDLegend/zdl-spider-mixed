@@ -27,7 +27,9 @@ public abstract class AbstractZhihuSearchParser<T> extends AbstractZhihuParser<T
                 .stream()
                 .map(o -> (JSONObject) o)
                 .filter(j -> "search_result".equals(j.getString("type")) && j.containsKey("object"))
-                .map(j -> j.getJSONObject("object").toJSONString().replace("<em>", "").replace("</em>", ""))
+                .map(j -> j.getJSONObject("object"))
+                .filter(j -> j.containsKey("type") && j.getString("type").equals(getObjectType()))
+                .map(j -> j.toJSONString().replace("<em>", "").replace("</em>", ""))
                 .map(s -> JSONObject.parseObject(s, (Class<T>) ClassUtil.getGenericType(this.getClass())))
                 .collect(Collectors.toList());
         return parser;
@@ -41,4 +43,6 @@ public abstract class AbstractZhihuSearchParser<T> extends AbstractZhihuParser<T
     }
 
     abstract String getType();
+
+    abstract String getObjectType();
 }

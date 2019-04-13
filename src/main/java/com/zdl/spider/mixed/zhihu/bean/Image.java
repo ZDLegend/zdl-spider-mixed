@@ -19,6 +19,11 @@ public class Image {
     private String path;
 
     /**
+     * 图片文件名
+     */
+    private String name;
+
+    /**
      * 图片所在回答
      */
     private AnswerEntity answerEntity;
@@ -30,6 +35,7 @@ public class Image {
         Image image = new Image();
         image.answerEntity = answerEntity;
         image.path = path;
+        image.name = path.substring(path.lastIndexOf('/') + 1);
         return image;
     }
 
@@ -39,7 +45,7 @@ public class Image {
      * @param localPath 本地路径
      */
     public CompletableFuture<Void> directSave(String localPath) {
-        return HttpUtil.downLoadFile(path, localPath);
+        return HttpUtil.downLoadFile(path, localPath, name);
     }
 
     /**
@@ -48,8 +54,10 @@ public class Image {
      * @param basePath 本地基础路径
      */
     public CompletableFuture<Void> saveByAuthorThenQuestion(String basePath) {
-        String absolutePath = basePath + File.separator + answerEntity.getAuthor().getName() + File.separator + answerEntity.getQuestion().getTitle();
-        return HttpUtil.downLoadFile(path, absolutePath);
+        String absolutePath = basePath
+                + File.separator + answerEntity.getAuthor().getName()
+                + File.separator + answerEntity.getQuestion().getTitle();
+        return HttpUtil.downLoadFile(path, absolutePath, name);
     }
 
     /**
@@ -58,8 +66,10 @@ public class Image {
      * @param basePath 本地基础路径
      */
     public CompletableFuture<Void> saveByQuestionThenAuthor(String basePath) {
-        String absolutePath = basePath + File.separator + answerEntity.getQuestion().getTitle() + File.separator + answerEntity.getAuthor().getName();
-        return HttpUtil.downLoadFile(path, absolutePath);
+        String absolutePath = basePath
+                + File.separator + answerEntity.getQuestion().getTitle()
+                + File.separator + answerEntity.getAuthor().getName();
+        return HttpUtil.downLoadFile(path, absolutePath, name);
     }
 
     public String getPath() {

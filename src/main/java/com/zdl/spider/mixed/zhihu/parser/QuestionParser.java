@@ -14,7 +14,7 @@ public class QuestionParser extends AbstractZhihuParser<AnswerEntity> {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionParser.class);
 
-    private static final String QUESTION_API = ZHIHU_ADDRESS + "api/v4/questions/%s/contents?include=%s&limit=%d&offset=%d&sort_by=created";
+    private static final String QUESTION_API = ZHIHU_ADDRESS + "api/v4/questions/%s/answers?include=%s&limit=%d&offset=%d&sort_by=created";
 
     @Override
     public String url(String q, int offset, int limit) {
@@ -24,7 +24,7 @@ public class QuestionParser extends AbstractZhihuParser<AnswerEntity> {
     }
 
     public static void main(String[] args) {
-        ZhihuParser question = new QuestionParser().execute("265634331", 0, 20).join();
+        ZhihuParser question = new QuestionParser().execute("36351193", 0, 20).join();
         logger.debug("{}", question);
     }
 }

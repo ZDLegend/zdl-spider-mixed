@@ -35,21 +35,34 @@ public final class HttpUtil {
      *
      * @param url      网络文件url
      * @param filePath 文件路径
+     * @param name     文件名
      */
-    public static CompletableFuture<Void> downLoadFile(String url, String filePath) {
+    public static CompletableFuture<Void> downLoadFile(String url, String filePath, String name) {
+        String path = filePath + File.separator + name;
+        logger.debug("save url:{} to {}", url, path);
+        File file = new File(path);
+        if (!file.exists()) {
+            try {
+                boolean is = file.createNewFile();
+                logger.debug("createNewFile:{}", is);
+            } catch (IOException e) {
+                logger.error("File:{}, error:{}", path, e.getMessage(), e);
+            }
+        }
+
         var r = HttpRequest.newBuilder(URI.create(url)).build();
         return HttpClient.newHttpClient()
                 .sendAsync(r, HttpResponse.BodyHandlers.ofInputStream())
                 .thenApply(HttpResponse::body)
                 .thenAccept(is -> {
-                    try (FileOutputStream fileOutputStream = new FileOutputStream(new File(filePath))) {
+                    try (FileOutputStream fileOutputStream = new FileOutputStream(new File(path))) {
                         is.transferTo(fileOutputStream);
                     } catch (IOException e) {
-                        logger.error("url:{}\nfile:{}\nexception:{}", url, filePath, e.getMessage(), e);
+                        logger.error("url:{}\nfile:{}\nexception:{}", url, path, e.getMessage(), e);
                     }
                 })
                 .exceptionally(e -> {
-                    logger.error("url:{}\nfile:{}\nexception:{}", url, filePath, e.getMessage(), e);
+                    logger.error("url:{}\nfile:{}\nexception:{}", url, path, e.getMessage(), e);
                     return null;
                 });
     }

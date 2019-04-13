@@ -19,8 +19,13 @@ public class SearchParser extends AbstractZhihuSearchParser<AnswerEntity> {
         return "general";
     }
 
+    @Override
+    String getObjectType() {
+        return "answer";
+    }
+
     public static void main(String[] args) {
-        var search = new SearchParser().execute("体验", 0, 20).join();
+        var search = new SearchParser().execute("健身", 0, 1).join();
         logger.debug("{}", search);
     }
 }

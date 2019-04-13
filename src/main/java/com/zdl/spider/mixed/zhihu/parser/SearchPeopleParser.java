@@ -18,6 +18,11 @@ public class SearchPeopleParser extends AbstractZhihuSearchParser<AuthorEntity> 
         return "people";
     }
 
+    @Override
+    String getObjectType() {
+        return "people";
+    }
+
     public static void main(String[] args) {
         var search = new SearchPeopleParser().execute("丢", 0, 20).join();
         logger.debug("{}", search);
