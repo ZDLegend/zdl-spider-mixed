@@ -1,6 +1,6 @@
 # zdl-spider-mixed
 各种爬虫、网站api封装
-说明：http访问主要是用了java11的异步http api，所以整个封装以CompletableFuture异步操作为主
+说明：http访问主要使用了java11的异步http api，所以整个封装以CompletableFuture异步操作为主
 
 ## 当前有的
 * 知乎爬虫(com.zdl.spider.mixed.zhihu)
