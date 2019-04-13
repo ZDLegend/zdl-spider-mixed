@@ -31,6 +31,11 @@ public interface ZhihuParser<T> {
                 .thenApply(json -> parser(this, json));
     }
 
+    default CompletableFuture<ZhihuParser<T>> execute(String url) {
+        return HttpUtil.get(url, getJsonHeaders(), ZhihuConst::paresContent)
+                .thenApply(json -> parser(this, json));
+    }
+
     /**
      * parser data of json
      */

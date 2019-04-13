@@ -35,11 +35,11 @@ public class Otn12306 extends Thread {
 
     private volatile boolean running = true;
 
-    public Otn12306(String date){
+    public Otn12306(String date) {
         this.date = date;
     }
 
-    public Otn12306(String date, String rail, String from, String to){
+    public Otn12306(String date, String rail, String from, String to) {
         this.to = to;
         this.from = from;
         this.rail = rail;
@@ -74,21 +74,21 @@ public class Otn12306 extends Thread {
         future.get();
     }
 
-    public void analysis(String s){
+    public void analysis(String s) {
 
-        if(s.contains("403 Forbidden")){
+        if (s.contains("403 Forbidden")) {
             logger.error("403 Forbidden");
             return;
         }
 
         var json = JSON.parseObject(s);
-        if(json == null){
+        if (json == null) {
             logger.error(s);
             return;
         }
 
         var data = json.getJSONObject("data");
-        if(data != null){
+        if (data != null) {
             JSONArray array = data.getJSONArray("result");
             array.stream().filter(o -> String.valueOf(o).contains(rail)).findFirst().ifPresent(o1 -> {
                 String[] ss = String.valueOf(o1).split("\\|");
@@ -98,7 +98,7 @@ public class Otn12306 extends Thread {
         }
     }
 
-    public String check(List<String> list){
+    public String check(List<String> list) {
 
         var secondClass = getTicketNum(list.get(30));
         var firstClass = getTicketNum(list.get(31));
@@ -106,26 +106,26 @@ public class Otn12306 extends Thread {
 
         var result = "二等座（" + secondClass + "), 一等座（" + firstClass + "), 商务（" + commerce + ")";
 
-        if(secondClass > 0){
+        if (secondClass > 0) {
             jump(result);
         }
 
         return result;
     }
 
-    private int getTicketNum(String t){
-        if("有".equals(t)) {
+    private int getTicketNum(String t) {
+        if ("有".equals(t)) {
             return 999;
         }
 
         try {
             return Integer.valueOf(t);
-        } catch (Exception e){
+        } catch (Exception e) {
             return 0;
         }
     }
 
-    public void jump(String result){
+    public void jump(String result) {
 
         running = false;
 
@@ -145,7 +145,7 @@ public class Otn12306 extends Thread {
 
     @Override
     public void run() {
-        while (running){
+        while (running) {
             try {
                 http(httpClient);
                 num++;

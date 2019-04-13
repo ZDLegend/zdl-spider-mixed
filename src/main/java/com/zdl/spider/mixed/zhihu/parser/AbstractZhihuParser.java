@@ -3,14 +3,21 @@ package com.zdl.spider.mixed.zhihu.parser;
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.ClassUtil;
 import com.zdl.spider.mixed.zhihu.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
  * Created by ZDLegend on 2019/4/2 20:32
  */
 public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
+
+    private static final Logger logger = LoggerFactory.getLogger(AbstractZhihuParser.class);
+    private static final int MAX_PAGE_SIZE = 10;
 
     Page page;
     List<T> contents;
@@ -35,5 +42,57 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
     @Override
     public Page page() {
         return page;
+    }
+
+    public CompletableFuture<Void> pagingParser(String q, int deep, Consumer<ZhihuParser<T>> consumer) {
+        return pagingParser(q, 0, deep, consumer);
+    }
+
+    private CompletableFuture<ZhihuParser<T>> pagingParser(String url, Consumer<ZhihuParser<T>> consumer) {
+        return execute(url)
+                .whenComplete((p, throwable) -> executeAfter(p, consumer, throwable))
+                .thenCompose(parser -> {
+                    if (parser.page().isEnd()) {
+                        CompletableFuture<ZhihuParser<T>> completableFuture = new CompletableFuture<>();
+                        completableFuture.complete(parser);
+                        return completableFuture;
+                    } else {
+                        return pagingParser(parser.page().getNext(), consumer);
+                    }
+                });
+    }
+
+    private CompletableFuture<Void> pagingParser(String q, int start, int deep, Consumer<ZhihuParser<T>> consumer) {
+        if (deep <= MAX_PAGE_SIZE && deep > 0) {
+            return execute(q, start, deep)
+                    .whenComplete((parser, throwable) -> executeAfter(parser, consumer, throwable))
+                    .thenAccept(parser -> logger.info("Execute finish!"));
+        } else if (deep < 0) {
+            //执行全量
+            var url = url(q, start, MAX_PAGE_SIZE);
+            return pagingParser(url, consumer).thenAccept(parser -> logger.info("Execute finish!"));
+        } else {
+            //分页执行
+            return execute(q, start, MAX_PAGE_SIZE)
+                    .whenComplete((parser, throwable) -> executeAfter(parser, consumer, throwable))
+                    .thenCompose(parser -> {
+                        int surplus = deep - start;
+                        if (parser.page().isEnd() || surplus == 0) {
+                            CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+                            completableFuture.complete(null);
+                            return completableFuture;
+                        } else {
+                            return pagingParser(q, start + MAX_PAGE_SIZE, surplus, consumer);
+                        }
+                    }).thenAccept(parser -> logger.info("Execute finish!"));
+        }
+    }
+
+    private void executeAfter(ZhihuParser<T> parser, Consumer<ZhihuParser<T>> consumer, Throwable throwable) {
+        if (parser != null) {
+            consumer.accept(parser);
+        } else {
+            logger.error(throwable.getMessage(), throwable);
+        }
     }
 }
