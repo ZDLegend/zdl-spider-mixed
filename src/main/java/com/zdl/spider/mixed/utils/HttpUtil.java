@@ -36,20 +36,20 @@ public final class HttpUtil {
      * @param url      网络文件url
      * @param filePath 文件路径
      */
-    public static void downLoadFile(String url, String filePath) {
+    public static CompletableFuture<Void> downLoadFile(String url, String filePath) {
         var r = HttpRequest.newBuilder(URI.create(url)).build();
-        HttpClient.newHttpClient()
+        return HttpClient.newHttpClient()
                 .sendAsync(r, HttpResponse.BodyHandlers.ofInputStream())
                 .thenApply(HttpResponse::body)
                 .thenAccept(is -> {
                     try (FileOutputStream fileOutputStream = new FileOutputStream(new File(filePath))) {
                         is.transferTo(fileOutputStream);
                     } catch (IOException e) {
-                        logger.error(e.getMessage(), e);
+                        logger.error("url:{}\nfile:{}\nexception:{}", url, filePath, e.getMessage(), e);
                     }
                 })
                 .exceptionally(e -> {
-                    logger.error(e.getMessage(), e);
+                    logger.error("url:{}\nfile:{}\nexception:{}", url, filePath, e.getMessage(), e);
                     return null;
                 });
     }

@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
  */
 public class JsoupUtil {
 
+    /**
+     * 获取html字符串中的所有图片地址
+     */
     public static List<String> getImageAddrByHtml(String html) {
         Document doc = Jsoup.parseBodyFragment(html);
         Element body = doc.body();
