@@ -22,15 +22,15 @@ public class FileUtil {
      * @return File object
      */
     public static File createFile(String path) {
-        File file = new File(path);
-        File fileParent = file.getParentFile();
+        var file = new File(path);
+        var fileParent = file.getParentFile();
         if (!fileParent.exists()) {
             boolean is = fileParent.mkdirs();
             logger.debug("create dirs {} : {}", fileParent.getAbsolutePath(), is);
         }
 
         try {
-            boolean is = file.createNewFile();
+            var is = file.createNewFile();
             logger.debug("create file {} : {}", file.getAbsolutePath(), is);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);

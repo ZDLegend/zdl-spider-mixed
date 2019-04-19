@@ -49,8 +49,8 @@ public class ClassUtil {
         if (ann != null) {
             return ann;
         } else {
-            Class clazz = method.getDeclaringClass();
-            Class superClass = clazz.getSuperclass();
+            var clazz = method.getDeclaringClass();
+            var superClass = clazz.getSuperclass();
             if (superClass != Object.class) {
                 try {
                     //父类方法
@@ -69,7 +69,7 @@ public class ClassUtil {
         if (index >= params.length || index < 0) {
             return null;
         }
-        Object res = params[index];
+        var res = params[index];
         if (res instanceof Class) {
             return ((Class) res);
         }

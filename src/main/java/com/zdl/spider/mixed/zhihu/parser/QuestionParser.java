@@ -18,13 +18,13 @@ public class QuestionParser extends AbstractZhihuParser<AnswerEntity> {
 
     @Override
     public String url(String q, int offset, int limit) {
-        String url = String.format(QUESTION_API, q, INCLUDE, limit, offset);
+        var url = String.format(QUESTION_API, q, INCLUDE, limit, offset);
         logger.debug("Zhihu Parser url:{}", url);
         return url;
     }
 
     public static void main(String[] args) {
-        ZhihuParser question = new QuestionParser().execute("36351193", 0, 20).join();
+        var question = new QuestionParser().execute("36351193", 0, 20).join();
         logger.debug("{}", question);
     }
 }
