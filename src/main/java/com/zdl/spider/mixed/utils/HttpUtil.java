@@ -7,11 +7,13 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
@@ -40,16 +42,7 @@ public final class HttpUtil {
     public static CompletableFuture<Void> downLoadFile(String url, String filePath, String name) {
         String path = filePath + File.separator + name;
         logger.debug("save url:{} to {}", url, path);
-        File file = new File(path);
-        if (!file.exists()) {
-            try {
-                boolean is = file.createNewFile();
-                logger.debug("createNewFile:{}", is);
-            } catch (IOException e) {
-                logger.error("File:{}, error:{}", path, e.getMessage(), e);
-            }
-        }
-
+        FileUtil.createFile(path);
         var r = HttpRequest.newBuilder(URI.create(url)).build();
         return HttpClient.newHttpClient()
                 .sendAsync(r, HttpResponse.BodyHandlers.ofInputStream())
@@ -65,6 +58,36 @@ public final class HttpUtil {
                     logger.error("url:{}\nfile:{}\nexception:{}", url, path, e.getMessage(), e);
                     return null;
                 });
+    }
+
+    /**
+     * 将多个url下载到一个文件中
+     * 使用了java11新特性：InputStream加强 / HTTP Client API
+     *
+     * @param urls      网络文件url
+     * @param filePath 文件路径
+     * @param name     文件名
+     */
+    public static void downLoadFiles(List<String> urls, String filePath, String name) {
+        String path = filePath + File.separator + name;
+        logger.debug("save urls:{} to {}", urls, path);
+        FileUtil.createFile(path);
+        try (FileOutputStream fileOutputStream = new FileOutputStream(new File(path))) {
+            urls.stream().map(s -> {
+                var r = HttpRequest.newBuilder(URI.create(s)).build();
+                return HttpClient.newHttpClient()
+                        .sendAsync(r, HttpResponse.BodyHandlers.ofInputStream())
+                        .thenApply(HttpResponse::body).join();
+            }).forEach(is -> {
+                try {
+                    is.transferTo(fileOutputStream);
+                } catch (IOException e) {
+                    logger.error("urls:{}\nfile:{}\nexception:{}", urls, path, e.getMessage(), e);
+                }
+            });
+        } catch (IOException e) {
+            logger.error("urls:{}\nfile:{}\nexception:{}", urls, path, e.getMessage(), e);
+        }
     }
 
     public static JSONObject post(String url, String data) {
