@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -24,5 +25,14 @@ public class JsoupUtil {
                 .map(element -> element.attr("src"))
                 .filter(s -> s.startsWith("http"))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 获取html字符串中的所有连接及连接标题
+     */
+    public static Map<String, String> getAddrByHtml(String html) {
+        Document doc = Jsoup.parseBodyFragment(html);
+        Elements links = doc.select("a[href]");
+        return links.stream().collect(Collectors.toMap(Element::text, l -> l.attr("href")));
     }
 }
