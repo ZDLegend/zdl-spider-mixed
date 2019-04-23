@@ -1,6 +1,5 @@
 package com.zdl.spider.mixed.zhihu.strategy;
 
-import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.zhihu.ZhihuConst;
 
@@ -52,5 +51,17 @@ public class VideoStrategy {
                          return list;
                      });
                  });
+     }
+
+    /**
+     * 视频下载
+     *
+     * @param videoId 视频id
+     * @param filePath 文件路径
+     * @param name 文件名
+     */
+     public static void videoDownload(String videoId, String filePath, String name) {
+         String url = String.format(VIDEO_DRESS, videoId);
+         getPlayPartUrl(url).thenAccept(list -> HttpUtil.downLoadFiles(list, filePath, name));
      }
 }
