@@ -60,8 +60,8 @@ public class VideoStrategy {
      * @param filePath 文件路径
      * @param name 文件名
      */
-     public static void videoDownload(String videoId, String filePath, String name) {
+     public static CompletableFuture<Void> videoDownload(String videoId, String filePath, String name) {
          String url = String.format(VIDEO_DRESS, videoId);
-         getPlayPartUrl(url).thenAccept(list -> HttpUtil.downLoadFiles(list, filePath, name));
+         return getPlayPartUrl(url).thenAccept(list -> HttpUtil.downLoadFiles(list, filePath, name));
      }
 }
