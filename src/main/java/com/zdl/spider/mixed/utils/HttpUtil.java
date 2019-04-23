@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -64,7 +63,7 @@ public final class HttpUtil {
      * 将多个url下载到一个文件中
      * 使用了java11新特性：InputStream加强 / HTTP Client API
      *
-     * @param urls      网络文件url
+     * @param urls     网络文件url
      * @param filePath 文件路径
      * @param name     文件名
      */
