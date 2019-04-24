@@ -1,5 +1,6 @@
 package com.zdl.spider.mixed.zhihu.strategy;
 
+import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.utils.JsoupUtil;
 import com.zdl.spider.mixed.zhihu.ZhihuConst;
@@ -8,12 +9,8 @@ import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
 import com.zdl.spider.mixed.zhihu.entity.AuthorEntity;
 import com.zdl.spider.mixed.zhihu.parser.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.zdl.spider.mixed.zhihu.ZhihuConst.getJsonHeaders;
 
@@ -30,7 +27,7 @@ public class VideoStrategy {
         getBySearch("你手机里最舍不得删的视频是哪个",
                 1,
                 5,
-                video -> video.directSave("C:\\Users\\zdlegend\\Pictures")
+                video -> video.directSave("C:\\Users\\zhangminghao\\Videos")
         ).join();
     }
 
@@ -112,49 +109,34 @@ public class VideoStrategy {
         CompletableFuture.allOf(futures).join();
     }
 
-    /**
-     * 获取视频分割后的相对url
-     *
-     * @param url url
-     * @return play_url
-     */
-    public static CompletableFuture<List<String>> getPlayPartUrl(String url) {
+    public static CompletableFuture<String> getVideoUrl(String url) {
         return HttpUtil.get(url, getJsonHeaders(), ZhihuConst::paresContent)
                 .thenApply(json -> {
-                    if (json.containsKey("HD")) {
-                        return json.getJSONObject("HD").getString("play_url");
-                    } else if (json.containsKey("SD")) {
-                        return json.getJSONObject("SD").getString("play_url");
-                    } else if (json.containsKey("LD")) {
-                        return json.getJSONObject("LD").getString("play_url");
+                    if (json.containsKey("playlist")) {
+                        JSONObject j = json.getJSONObject("playlist");
+                        if (j.containsKey("HD")) {
+                            return j.getJSONObject("HD").getString("play_url");
+                        } else if (j.containsKey("SD")) {
+                            return j.getJSONObject("SD").getString("play_url");
+                        } else if (j.containsKey("LD")) {
+                            return j.getJSONObject("LD").getString("play_url");
+                        } else {
+                            return null;
+                        }
                     } else {
                         return null;
                     }
-                }).thenCompose(s -> {
-                    List<String> list = new ArrayList<>();
-                    return HttpUtil.get(url, getJsonHeaders(), content -> {
-                        // 提取出相对路径
-                        String relUrl = url.replaceAll("/\\w+-\\w+-\\w+-\\w+-\\w+\\.m3u8.*", "");
-
-                        // 正则提取出的为相对路径, 需与前面的relUrl完成拼接
-                        Matcher matcher = Pattern.compile("EXTINF:\\d+\\.\\d+,(.+?)#").matcher(content);
-                        while (matcher.find()) {
-                            list.add(relUrl + "/" + matcher.group(1));
-                        }
-                        return list;
-                    });
                 });
     }
 
     /**
      * 视频下载
      *
-     * @param videoId  视频id
+     * @param url      视频URL
      * @param filePath 文件路径
      * @param name     文件名
      */
-    public static CompletableFuture<Void> videoDownload(String videoId, String filePath, String name) {
-        String url = String.format(VIDEO_DRESS, videoId);
-        return getPlayPartUrl(url).thenAccept(list -> HttpUtil.downLoadFiles(list, filePath, name));
+    public static CompletableFuture<Void> videoDownload(String url, String filePath, String name) {
+        return getVideoUrl(url).thenCompose(videoUrl -> HttpUtil.downLoadFile(videoUrl, filePath, name));
     }
 }

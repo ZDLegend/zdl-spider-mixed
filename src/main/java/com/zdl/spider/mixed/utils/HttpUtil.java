@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
+import static com.zdl.spider.mixed.utils.HttpConst.AGENT;
+import static com.zdl.spider.mixed.utils.HttpConst.AGENT_CONTENT;
+
 /**
  * http相关工具类
  * <p>
@@ -59,37 +62,23 @@ public final class HttpUtil {
                 });
     }
 
-    /**
-     * 将多个url下载到一个文件中
-     * 使用了java11新特性：InputStream加强 / HTTP Client API
-     *
-     * @param urls     网络文件url
-     * @param filePath 文件路径
-     * @param name     文件名
-     */
-    public static void downLoadFiles(List<String> urls, String filePath, String name) {
+    public static CompletableFuture<Void> downLoadFileByString(String url, String filePath, String name) {
         String path = filePath + File.separator + name;
-        logger.debug("save urls:{} to {}", urls, path);
+        logger.debug("save url:{} to {}", url, path);
         FileUtil.createFile(path);
-        try (FileOutputStream fileOutputStream = new FileOutputStream(new File(path))) {
-            urls.stream().map(s -> {
-                var r = HttpRequest.newBuilder(URI.create(s)).build();
-                return HttpClient.newHttpClient()
-                        .sendAsync(r, HttpResponse.BodyHandlers.ofInputStream())
-                        .thenApply(HttpResponse::body).join();
-            }).forEach(is -> {
-                try {
-                    is.transferTo(fileOutputStream);
-                } catch (IOException e) {
-                    logger.error("urls:{}\nfile:{}\nexception:{}", urls, path, e.getMessage(), e);
-                }
-            });
-        } catch (IOException e) {
-            logger.error("urls:{}\nfile:{}\nexception:{}", urls, path, e.getMessage(), e);
-        }
+        return get(url, new String[]{AGENT, AGENT_CONTENT}, s -> {
+            try (FileOutputStream fileOutputStream = new FileOutputStream(new File(path))) {
+                fileOutputStream.write(s.getBytes());
+            } catch (IOException e) {
+                logger.error("url:{}\nfile:{}\nexception:{}", url, path, e.getMessage(), e);
+            }
+            return null;
+        });
     }
 
     public static JSONObject post(String url, String data) {
+
+        logger.debug("url:{}, method:post", url);
 
         var r = HttpRequest.newBuilder(URI.create(url))
                 .timeout(Duration.ofMillis(CONNECTION_TIME_OUT))
@@ -109,6 +98,8 @@ public final class HttpUtil {
     }
 
     public static <U> CompletableFuture<U> get(String url, String[] headers, Function<String, U> apply) {
+
+        logger.debug("url:{}, method:get", url);
 
         var r = HttpRequest.newBuilder(URI.create(url))
                 .timeout(Duration.ofMillis(CONNECTION_TIME_OUT))

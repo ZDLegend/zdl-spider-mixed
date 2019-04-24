@@ -18,9 +18,7 @@ public class QuestionParser extends AbstractZhihuParser<AnswerEntity> {
 
     @Override
     public String url(String q, int offset, int limit) {
-        var url = String.format(QUESTION_API, q, INCLUDE, limit, offset);
-        logger.debug("Zhihu Parser url:{}", url);
-        return url;
+        return String.format(QUESTION_API, q, INCLUDE, limit, offset);
     }
 
     public static void main(String[] args) {

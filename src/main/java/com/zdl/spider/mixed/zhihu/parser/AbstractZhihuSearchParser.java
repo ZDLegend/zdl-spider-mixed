@@ -37,9 +37,7 @@ public abstract class AbstractZhihuSearchParser<T> extends AbstractZhihuParser<T
 
     @Override
     public String url(String q, int offset, int limit) {
-        var url = String.format(SEARCH_API, getType(), q, offset, limit);
-        logger.debug("{} search parser url:{}", getType(), url);
-        return url;
+        return String.format(SEARCH_API, getType(), q, offset, limit);
     }
 
     abstract String getType();
