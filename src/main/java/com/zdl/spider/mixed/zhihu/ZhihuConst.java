@@ -1,6 +1,7 @@
 package com.zdl.spider.mixed.zhihu;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
 import static com.zdl.spider.mixed.utils.HttpConst.*;
@@ -23,7 +24,11 @@ public final class ZhihuConst {
     }
 
     public static JSONObject paresContent(String content) {
-        return JSON.parseObject(content);
+        try {
+            return JSON.parseObject(content);
+        } catch (JSONException e) {
+            throw new ZhihuSpiderException("json pares filed", e);
+        }
     }
 
 }
