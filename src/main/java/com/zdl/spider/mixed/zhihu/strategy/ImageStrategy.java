@@ -17,7 +17,7 @@ import java.util.function.Function;
 public class ImageStrategy {
 
     public static void main(String[] args) {
-        getImagesBySearch("一个人健身前和健身后有什么区别",
+        getBySearch("一个人健身前和健身后有什么区别",
                 1,
                 5,
                 image -> image.directSave("C:\\Users\\zdlegend\\Pictures")
@@ -31,13 +31,13 @@ public class ImageStrategy {
      * @param x       搜索深度
      * @param y       搜索结果深度
      */
-    public static CompletableFuture<Void> getImagesBySearch(String content, int x, int y,
-                                                            Function<Image, CompletableFuture<Void>> action) {
+    public static CompletableFuture<Void> getBySearch(String content, int x, int y,
+                                                      Function<Image, CompletableFuture<Void>> action) {
         return new SearchParser().pagingParser(content, x, answerParser -> {
             CompletableFuture[] futures = answerParser.contents()
                     .stream()
                     .map(answerEntity -> answerEntity.getQuestion().getId())
-                    .map(questionId -> getImagesByQuestion(questionId, y, action))
+                    .map(questionId -> getByQuestion(questionId, y, action))
                     .toArray(CompletableFuture[]::new);
             CompletableFuture.allOf(futures).join();
         });
@@ -49,8 +49,8 @@ public class ImageStrategy {
      * @param content 搜索内容
      * @param x       搜索深度
      */
-    public static CompletableFuture<Void> getImagesBySearch(String content, int x, Function<Image, CompletableFuture<Void>> action) {
-        return new SearchParser().pagingParser(content, x, parser -> pictureHandle(action, parser));
+    public static CompletableFuture<Void> getBySearch(String content, int x, Function<Image, CompletableFuture<Void>> action) {
+        return new SearchParser().pagingParser(content, x, parser -> resourceHandle(action, parser));
     }
 
     /**
@@ -60,12 +60,12 @@ public class ImageStrategy {
      * @param x       搜索深度
      * @param y       搜索结果深度
      */
-    public static CompletableFuture<Void> getImagesByPeopleSearch(String content, int x, int y, Function<Image, CompletableFuture<Void>> action) {
+    public static CompletableFuture<Void> getByPeopleSearch(String content, int x, int y, Function<Image, CompletableFuture<Void>> action) {
         return new SearchPeopleParser().pagingParser(content, x, authorParser -> {
             CompletableFuture[] futures = authorParser.contents()
                     .stream()
                     .map(AuthorEntity::getUrlToken)
-                    .map(token -> getImagesByAuthor(token, y, action))
+                    .map(token -> getByAuthor(token, y, action))
                     .toArray(CompletableFuture[]::new);
             CompletableFuture.allOf(futures).join();
         });
@@ -76,9 +76,9 @@ public class ImageStrategy {
      *
      * @param questionId 问题id
      */
-    public static CompletableFuture<Void> getImagesByQuestion(String questionId, int y,
-                                                              Function<Image, CompletableFuture<Void>> action) {
-        return new QuestionParser().pagingParser(questionId, y, parser -> pictureHandle(action, parser));
+    public static CompletableFuture<Void> getByQuestion(String questionId, int y,
+                                                        Function<Image, CompletableFuture<Void>> action) {
+        return new QuestionParser().pagingParser(questionId, y, parser -> resourceHandle(action, parser));
     }
 
     /**
@@ -86,11 +86,11 @@ public class ImageStrategy {
      *
      * @param token 用户id
      */
-    public static CompletableFuture<Void> getImagesByAuthor(String token, int y, Function<Image, CompletableFuture<Void>> action) {
-        return new PeopleAnswerParser().pagingParser(token, y, parser -> pictureHandle(action, parser));
+    public static CompletableFuture<Void> getByAuthor(String token, int y, Function<Image, CompletableFuture<Void>> action) {
+        return new PeopleAnswerParser().pagingParser(token, y, parser -> resourceHandle(action, parser));
     }
 
-    private static void pictureHandle(Function<Image, CompletableFuture<Void>> action, ZhihuParser<AnswerEntity> parser) {
+    private static void resourceHandle(Function<Image, CompletableFuture<Void>> action, ZhihuParser<AnswerEntity> parser) {
         CompletableFuture[] futures = parser.contents()
                 .stream()
                 .flatMap(answer -> JsoupUtil.getImageAddrByHtml(answer.getContent()).stream().map(s -> Image.of(s, answer)))
