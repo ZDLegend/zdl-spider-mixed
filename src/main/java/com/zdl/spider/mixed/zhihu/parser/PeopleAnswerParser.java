@@ -16,6 +16,13 @@ public class PeopleAnswerParser extends AbstractZhihuParser<AnswerEntity> {
 
     private static final String PEOPLE_ANSWER_API = ZHIHU_ADDRESS + "api/v4/members/%s/answers?include=%s&limit=%d&offset=%d&sort_by=created";
 
+    public static PeopleAnswerParser getInstance() {
+        return new PeopleAnswerParser();
+    }
+
+    private PeopleAnswerParser() {
+    }
+
     @Override
     public String url(String q, int offset, int limit) {
         var url = String.format(PEOPLE_ANSWER_API, q, INCLUDE, limit, offset);

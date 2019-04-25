@@ -13,6 +13,13 @@ public class SearchPeopleParser extends AbstractZhihuSearchParser<AuthorEntity> 
 
     private static final Logger logger = LoggerFactory.getLogger(SearchPeopleParser.class);
 
+    public static SearchPeopleParser getInstance() {
+        return new SearchPeopleParser();
+    }
+
+    private SearchPeopleParser() {
+    }
+
     @Override
     String getType() {
         return "people";

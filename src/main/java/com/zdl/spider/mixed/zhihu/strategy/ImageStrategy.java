@@ -3,8 +3,7 @@ package com.zdl.spider.mixed.zhihu.strategy;
 import com.zdl.spider.mixed.utils.JsoupUtil;
 import com.zdl.spider.mixed.zhihu.bean.Image;
 import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
-import com.zdl.spider.mixed.zhihu.entity.AuthorEntity;
-import com.zdl.spider.mixed.zhihu.parser.*;
+import com.zdl.spider.mixed.zhihu.parser.ZhihuParser;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -14,83 +13,27 @@ import java.util.function.Function;
  * <p>
  * Created by ZDLegend on 2019/4/12 15:57
  */
-public class ImageStrategy {
+public class ImageStrategy implements AnswerStrategy<Image> {
 
     public static void main(String[] args) {
-        getBySearch("一个人健身前和健身后有什么区别",
+        ImageStrategy.getInstance().getBySearch("一个人健身前和健身后有什么区别",
                 1,
                 5,
                 image -> image.directSave("C:\\Users\\zdlegend\\Pictures")
         ).join();
     }
 
-    /**
-     * 通过搜索获取图片
-     *
-     * @param content 搜索内容
-     * @param x       搜索深度
-     * @param y       搜索结果深度
-     */
-    public static CompletableFuture<Void> getBySearch(String content, int x, int y,
-                                                      Function<Image, CompletableFuture<Void>> action) {
-        return new SearchParser().pagingParser(content, x, answerParser -> {
-            CompletableFuture[] futures = answerParser.contents()
-                    .stream()
-                    .map(answerEntity -> answerEntity.getQuestion().getId())
-                    .map(questionId -> getByQuestion(questionId, y, action))
-                    .toArray(CompletableFuture[]::new);
-            CompletableFuture.allOf(futures).join();
-        });
+    private ImageStrategy() {
     }
 
-    /**
-     * 直接获取搜索结果(不需要在搜索结果的问题中搜索时调用)
-     *
-     * @param content 搜索内容
-     * @param x       搜索深度
-     */
-    public static CompletableFuture<Void> getBySearch(String content, int x, Function<Image, CompletableFuture<Void>> action) {
-        return new SearchParser().pagingParser(content, x, parser -> resourceHandle(action, parser));
+    private static ImageStrategy instance = new ImageStrategy();
+
+    public static ImageStrategy getInstance() {
+        return instance;
     }
 
-    /**
-     * 通过搜索人名获取图片
-     *
-     * @param content 搜索内容
-     * @param x       搜索深度
-     * @param y       搜索结果深度
-     */
-    public static CompletableFuture<Void> getByPeopleSearch(String content, int x, int y, Function<Image, CompletableFuture<Void>> action) {
-        return new SearchPeopleParser().pagingParser(content, x, authorParser -> {
-            CompletableFuture[] futures = authorParser.contents()
-                    .stream()
-                    .map(AuthorEntity::getUrlToken)
-                    .map(token -> getByAuthor(token, y, action))
-                    .toArray(CompletableFuture[]::new);
-            CompletableFuture.allOf(futures).join();
-        });
-    }
-
-    /**
-     * 获取某个问题下回答内容中的图片
-     *
-     * @param questionId 问题id
-     */
-    public static CompletableFuture<Void> getByQuestion(String questionId, int y,
-                                                        Function<Image, CompletableFuture<Void>> action) {
-        return new QuestionParser().pagingParser(questionId, y, parser -> resourceHandle(action, parser));
-    }
-
-    /**
-     * 获取某个作者回答内容中的图片
-     *
-     * @param token 用户id
-     */
-    public static CompletableFuture<Void> getByAuthor(String token, int y, Function<Image, CompletableFuture<Void>> action) {
-        return new PeopleAnswerParser().pagingParser(token, y, parser -> resourceHandle(action, parser));
-    }
-
-    private static void resourceHandle(Function<Image, CompletableFuture<Void>> action, ZhihuParser<AnswerEntity> parser) {
+    @Override
+    public void resourceHandle(Function<Image, CompletableFuture<Void>> action, ZhihuParser<AnswerEntity> parser) {
         CompletableFuture[] futures = parser.contents()
                 .stream()
                 .flatMap(answer -> JsoupUtil.getImageAddrByHtml(answer.getContent()).stream().map(s -> Image.of(s, answer)))

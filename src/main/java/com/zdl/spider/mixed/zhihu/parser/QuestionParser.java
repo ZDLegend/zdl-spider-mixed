@@ -16,6 +16,13 @@ public class QuestionParser extends AbstractZhihuParser<AnswerEntity> {
 
     private static final String QUESTION_API = ZHIHU_ADDRESS + "api/v4/questions/%s/answers?include=%s&limit=%d&offset=%d&sort_by=created";
 
+    public static QuestionParser getInstance() {
+        return new QuestionParser();
+    }
+
+    private QuestionParser() {
+    }
+
     @Override
     public String url(String q, int offset, int limit) {
         return String.format(QUESTION_API, q, INCLUDE, limit, offset);

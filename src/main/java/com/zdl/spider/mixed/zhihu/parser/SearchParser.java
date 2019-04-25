@@ -14,6 +14,13 @@ public class SearchParser extends AbstractZhihuSearchParser<AnswerEntity> {
 
     private static final Logger logger = LoggerFactory.getLogger(SearchParser.class);
 
+    public static SearchParser getInstance() {
+        return new SearchParser();
+    }
+
+    private SearchParser() {
+    }
+
     @Override
     String getType() {
         return "general";
