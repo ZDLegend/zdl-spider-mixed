@@ -20,6 +20,8 @@ public class AuthorEntity {
     private String userType;
     private String url;
     private String type;
+
+    //头像
     private String avatarUrl;
     private int answerCount;
     private int articlesCount;

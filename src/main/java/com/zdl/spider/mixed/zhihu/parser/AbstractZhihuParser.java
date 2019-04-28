@@ -48,7 +48,7 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
         return pagingParser(q, 0, deep, consumer);
     }
 
-    private CompletableFuture<ZhihuParser<T>> pagingParser(String url, Consumer<ZhihuParser<T>> consumer) {
+    CompletableFuture<ZhihuParser<T>> pagingParser(String url, Consumer<ZhihuParser<T>> consumer) {
         return execute(url)
                 .whenComplete((p, throwable) -> executeAfter(p, consumer, throwable))
                 .thenCompose(parser -> {
@@ -58,6 +58,21 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
                         return completableFuture;
                     } else {
                         return pagingParser(parser.page().getNext(), consumer);
+                    }
+                });
+    }
+
+    CompletableFuture<ZhihuParser<T>> pagingCycle(String url, int cycle, Consumer<ZhihuParser<T>> consumer) {
+        return execute(url)
+                .whenComplete((p, throwable) -> executeAfter(p, consumer, throwable))
+                .thenCompose(parser -> {
+                    int newCycle = cycle - 1;
+                    if (parser.page().isEnd() || newCycle <= 0) {
+                        CompletableFuture<ZhihuParser<T>> completableFuture = new CompletableFuture<>();
+                        completableFuture.complete(parser);
+                        return completableFuture;
+                    } else {
+                        return pagingCycle(parser.page().getNext(), newCycle, consumer);
                     }
                 });
     }
@@ -88,7 +103,7 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
         }
     }
 
-    private void executeAfter(ZhihuParser<T> parser, Consumer<ZhihuParser<T>> consumer, Throwable throwable) {
+    void executeAfter(ZhihuParser<T> parser, Consumer<ZhihuParser<T>> consumer, Throwable throwable) {
         if (parser != null) {
             consumer.accept(parser);
         } else {
