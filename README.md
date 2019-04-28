@@ -9,6 +9,7 @@
   * 知乎用户搜索(SearchPeopleParser.java)
   * 知乎获取问题下的答案(QuestionParser.java)
   * 知乎用户回答内容获取(PeopleAnswerParser.java)
+  * 知乎用户动态内容获取(PeopleActivitiesParser.java)
   
 * 知乎restful api组合调用(com.zdl.spider.mixed.zhihu.strategy),调用demo可查看类的主函数
   * 知乎回答内容中的图片获取(ImageStrategy.java)
