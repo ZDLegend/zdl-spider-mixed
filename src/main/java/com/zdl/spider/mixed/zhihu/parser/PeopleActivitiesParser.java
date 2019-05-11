@@ -27,18 +27,20 @@ public class PeopleActivitiesParser extends AbstractZhihuParser<ActivityEntity> 
         return url(q, 0, 0);
     }
 
+    public CompletableFuture<ZhihuParser<ActivityEntity>> executeByQ(String q){
+        return execute(q, 0, 0);
+    }
+
     @Override
     public String url(String q, int offset, int limit) {
-        var url = String.format(PEOPLE_ACTIVITIES_API, q);
-        logger.debug("Zhihu People Activities Parser url:{}", url);
-        return url;
+        return String.format(PEOPLE_ACTIVITIES_API, q);
     }
 
     @Override
     public CompletableFuture<Void> pagingParser(String q, int y, Consumer<ZhihuParser<ActivityEntity>> consumer) {
 
         if (y <= MAX_PAGE_SIZE && y > 0) {
-            return execute(q, 0, 0)
+            return executeByQ(q)
                     .whenComplete((parser, throwable) -> executeAfter(parser, consumer, throwable))
                     .thenAccept(parser -> logger.info("Execute finish!"));
         } else if (y < 0) {
@@ -53,5 +55,10 @@ public class PeopleActivitiesParser extends AbstractZhihuParser<ActivityEntity> 
             }
             return pagingCycle(url(q), cycle, consumer).thenAccept(parser -> logger.info("Execute finish!"));
         }
+    }
+
+    public static void main(String[] args) {
+        var activities = new PeopleActivitiesParser().executeByQ("tian-wang-mao").join();
+        logger.debug("{}", activities);
     }
 }
