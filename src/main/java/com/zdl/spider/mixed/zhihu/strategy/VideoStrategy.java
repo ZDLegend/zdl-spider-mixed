@@ -22,6 +22,8 @@ public class VideoStrategy implements AnswerStrategy<Video> {
 
     public static final String VIDEO_DRESS = "https://lens.zhihu.com/api/v4/videos/%s";
 
+    private static final String PLAY_URL = "play_url";
+
     public static void main(String[] args) {
         VideoStrategy.getInstance().getBySearch("你手机里最舍不得删的视频是哪个",
                 1,
@@ -58,11 +60,11 @@ public class VideoStrategy implements AnswerStrategy<Video> {
                     if (json.containsKey("playlist")) {
                         JSONObject j = json.getJSONObject("playlist");
                         if (j.containsKey("HD")) {
-                            return j.getJSONObject("HD").getString("play_url");
+                            return j.getJSONObject("HD").getString(PLAY_URL);
                         } else if (j.containsKey("SD")) {
-                            return j.getJSONObject("SD").getString("play_url");
+                            return j.getJSONObject("SD").getString(PLAY_URL);
                         } else if (j.containsKey("LD")) {
-                            return j.getJSONObject("LD").getString("play_url");
+                            return j.getJSONObject("LD").getString(PLAY_URL);
                         } else {
                             return null;
                         }
