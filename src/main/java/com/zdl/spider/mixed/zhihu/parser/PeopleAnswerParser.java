@@ -31,7 +31,7 @@ public class PeopleAnswerParser extends AbstractZhihuParser<AnswerEntity> {
     }
 
     public static void main(String[] args) {
-        var question = new PeopleAnswerParser().execute("tian-wang-mao", 0, 20).join();
+        var question = getInstance().execute("tian-wang-mao", 0, 20).join();
         logger.debug("{}", question);
     }
 }

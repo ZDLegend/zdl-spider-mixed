@@ -31,7 +31,7 @@ public class SearchPeopleParser extends AbstractZhihuSearchParser<AuthorEntity> 
     }
 
     public static void main(String[] args) {
-        var search = new SearchPeopleParser().execute("丢", 0, 20).join();
+        var search = getInstance().execute("丢", 0, 20).join();
         logger.debug("{}", search);
     }
 }

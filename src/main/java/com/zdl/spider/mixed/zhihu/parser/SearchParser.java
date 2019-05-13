@@ -32,7 +32,7 @@ public class SearchParser extends AbstractZhihuSearchParser<AnswerEntity> {
     }
 
     public static void main(String[] args) {
-        var search = new SearchParser().execute("健身", 0, 1).join();
+        var search = getInstance().execute("健身", 0, 1).join();
         logger.debug("{}", search);
     }
 }

@@ -23,11 +23,15 @@ public class PeopleActivitiesParser extends AbstractZhihuParser<ActivityEntity> 
 
     private static final String PEOPLE_ACTIVITIES_API = ZHIHU_ADDRESS + "api/v4/members/%s/activities?limit=7";
 
+    public static PeopleActivitiesParser getInstance() {
+        return new PeopleActivitiesParser();
+    }
+
     public String url(String q) {
         return url(q, 0, 0);
     }
 
-    public CompletableFuture<ZhihuParser<ActivityEntity>> executeByQ(String q){
+    public CompletableFuture<ZhihuParser<ActivityEntity>> executeByQ(String q) {
         return execute(q, 0, 0);
     }
 
@@ -58,7 +62,7 @@ public class PeopleActivitiesParser extends AbstractZhihuParser<ActivityEntity> 
     }
 
     public static void main(String[] args) {
-        var activities = new PeopleActivitiesParser().executeByQ("tian-wang-mao").join();
+        var activities = getInstance().executeByQ("tian-wang-mao").join();
         logger.debug("{}", activities);
     }
 }
