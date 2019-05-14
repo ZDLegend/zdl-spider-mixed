@@ -1,5 +1,6 @@
 package com.zdl.spider.mixed.zhihu.bean;
 
+import com.zdl.spider.mixed.utils.FileUtil;
 import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
 
@@ -55,8 +56,8 @@ public class Image {
      */
     public CompletableFuture<Void> saveByAuthorThenQuestion(String basePath) {
         String absolutePath = basePath
-                + File.separator + answerEntity.getAuthor().getName()
-                + File.separator + answerEntity.getQuestion().getTitle();
+                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName())
+                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle());
         return HttpUtil.downLoadFile(path, absolutePath, name);
     }
 
@@ -67,8 +68,8 @@ public class Image {
      */
     public CompletableFuture<Void> saveByQuestionThenAuthor(String basePath) {
         String absolutePath = basePath
-                + File.separator + answerEntity.getQuestion().getTitle()
-                + File.separator + answerEntity.getAuthor().getName();
+                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle())
+                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName());
         return HttpUtil.downLoadFile(path, absolutePath, name);
     }
 

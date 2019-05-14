@@ -15,16 +15,29 @@ public class FileUtil {
 
     private static Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
+    public static String removeIllegalWord(String name){
+        return name.replace("\\", "、")
+                .replace("/", "、")
+                .replace(":", "：")
+                .replace("*", "")
+                .replace("\"", "")
+                .replace("<", "《")
+                .replace(">", "》")
+                .replace("?", "？")
+                .replace("|", "");
+    }
+
     /**
      * create file by file`s path
      *
      * @param path file`s path
      * @return File object
      */
-    public static File createFile(String path) {
+    public static void createFile(String path) {
+
         var file = new File(path);
         var fileParent = file.getParentFile();
-        if (!fileParent.exists()) {
+        if (fileParent != null && !fileParent.exists()) {
             boolean is = fileParent.mkdirs();
             logger.debug("create dirs {} : {}", fileParent.getAbsolutePath(), is);
         }
@@ -35,8 +48,6 @@ public class FileUtil {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
-
-        return file;
     }
 
 }

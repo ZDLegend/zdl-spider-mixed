@@ -21,6 +21,10 @@ public class ImageStrategy implements AnswerStrategy<Image> {
                 5,
                 image -> image.directSave("C:\\Users\\zdlegend\\Pictures")
         ).join();
+
+        ImageStrategy.getInstance()
+                .getByAuthor("he-xiao-lou-42", 20, image -> image.saveByAuthorThenQuestion("C:\\Users\\zdlegend\\Pictures"))
+                .join();
     }
 
     private ImageStrategy() {

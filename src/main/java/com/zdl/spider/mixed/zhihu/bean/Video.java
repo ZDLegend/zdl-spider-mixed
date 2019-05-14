@@ -1,5 +1,6 @@
 package com.zdl.spider.mixed.zhihu.bean;
 
+import com.zdl.spider.mixed.utils.FileUtil;
 import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
 import com.zdl.spider.mixed.zhihu.strategy.VideoStrategy;
 
@@ -66,8 +67,8 @@ public class Video {
      */
     public CompletableFuture<Void> saveByAuthorThenQuestion(String basePath) {
         String absolutePath = basePath
-                + File.separator + answerEntity.getAuthor().getName()
-                + File.separator + answerEntity.getQuestion().getTitle();
+                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName())
+                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle());
         return VideoStrategy.videoDownload(path, absolutePath, name);
     }
 
@@ -78,8 +79,8 @@ public class Video {
      */
     public CompletableFuture<Void> saveByQuestionThenAuthor(String basePath) {
         String absolutePath = basePath
-                + File.separator + answerEntity.getQuestion().getTitle()
-                + File.separator + answerEntity.getAuthor().getName();
+                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle())
+                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName());
         return VideoStrategy.videoDownload(path, absolutePath, name);
     }
 

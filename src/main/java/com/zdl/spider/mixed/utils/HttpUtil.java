@@ -41,7 +41,7 @@ public final class HttpUtil {
      * @param name     文件名
      */
     public static CompletableFuture<Void> downLoadFile(String url, String filePath, String name) {
-        String path = filePath + File.separator + name;
+        String path = filePath + File.separator + FileUtil.removeIllegalWord(name);
         logger.debug("save url:{} to {}", url, path);
         FileUtil.createFile(path);
         var r = HttpRequest.newBuilder(URI.create(url)).build();
