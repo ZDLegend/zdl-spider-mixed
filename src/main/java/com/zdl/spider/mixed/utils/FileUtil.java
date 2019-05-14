@@ -15,7 +15,7 @@ public class FileUtil {
 
     private static Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
-    public static String removeIllegalWord(String name){
+    public static String removeIllegalWord(String name) {
         return name.replace("\\", "、")
                 .replace("/", "、")
                 .replace(":", "：")
