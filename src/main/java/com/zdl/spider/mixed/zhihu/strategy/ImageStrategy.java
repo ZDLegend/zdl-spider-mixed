@@ -20,11 +20,8 @@ public class ImageStrategy implements AnswerStrategy<Image> {
                 1,
                 5,
                 image -> image.directSave("C:\\Users\\zdlegend\\Pictures")
-        ).join();
-
-        ImageStrategy.getInstance()
-                .getByAuthor("he-xiao-lou-42", 20, image -> image.saveByAuthorThenQuestion("C:\\Users\\zdlegend\\Pictures"))
-                .join();
+        ).runAfterBoth(ImageStrategy.getInstance().getByAuthor("he-xiao-lou-42", 20,
+                image -> image.saveByAuthorThenQuestion("C:\\Users\\zdlegend\\Pictures")), () -> System.out.println("finished"));
     }
 
     private ImageStrategy() {
