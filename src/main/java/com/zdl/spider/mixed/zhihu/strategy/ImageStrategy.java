@@ -1,7 +1,7 @@
 package com.zdl.spider.mixed.zhihu.strategy;
 
 import com.zdl.spider.mixed.utils.JsoupUtil;
-import com.zdl.spider.mixed.zhihu.bean.Image;
+import com.zdl.spider.mixed.zhihu.resources.Image;
 import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
 import com.zdl.spider.mixed.zhihu.parser.ZhihuParser;
 

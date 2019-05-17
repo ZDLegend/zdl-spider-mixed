@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.utils.JsoupUtil;
 import com.zdl.spider.mixed.zhihu.ZhihuConst;
-import com.zdl.spider.mixed.zhihu.bean.Video;
+import com.zdl.spider.mixed.zhihu.resources.Video;
 import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
 import com.zdl.spider.mixed.zhihu.parser.ZhihuParser;
 

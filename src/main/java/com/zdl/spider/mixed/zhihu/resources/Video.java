@@ -1,4 +1,4 @@
-package com.zdl.spider.mixed.zhihu.bean;
+package com.zdl.spider.mixed.zhihu.resources;
 
 import com.zdl.spider.mixed.utils.FileUtil;
 import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
@@ -14,7 +14,7 @@ import static com.zdl.spider.mixed.zhihu.strategy.VideoStrategy.VIDEO_DRESS;
  * <p>
  * Created by ZDLegend on 2019/4/23 16:02
  */
-public class Video {
+public class Video implements Resource  {
 
     /**
      * 视频路径

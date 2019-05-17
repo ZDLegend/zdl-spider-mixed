@@ -1,4 +1,4 @@
-package com.zdl.spider.mixed.zhihu.bean;
+package com.zdl.spider.mixed.zhihu.resources;
 
 import com.zdl.spider.mixed.utils.FileUtil;
 import com.zdl.spider.mixed.utils.HttpUtil;
@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
  * <p>
  * Created by ZDLegend on 2019/4/12 16:01
  */
-public class Image {
+public class Image implements Resource {
 
     /**
      * 图片路径
