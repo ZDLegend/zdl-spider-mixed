@@ -12,10 +12,10 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * 回答内容对象
- *
+ * <p>
  * Created by ZDLegend on 2019/5/17 17:43
  */
-public class Content implements Resource  {
+public class Content implements Resource {
 
     private static Logger logger = LoggerFactory.getLogger(Content.class);
 
@@ -26,7 +26,7 @@ public class Content implements Resource  {
      */
     private AnswerEntity answerEntity;
 
-    public static Content of( AnswerEntity answerEntity) {
+    public static Content of(AnswerEntity answerEntity) {
         Content content = new Content();
         content.answerEntity = answerEntity;
         content.name = answerEntity.getName();
@@ -51,7 +51,7 @@ public class Content implements Resource  {
         return saveContent(absolutePath, name);
     }
 
-    private CompletableFuture<Void> saveContent(String filePath, String name){
+    private CompletableFuture<Void> saveContent(String filePath, String name) {
         String path = filePath + File.separator + FileUtil.removeIllegalWord(name);
         logger.debug("save to {}", path);
         FileUtil.createFile(path);
