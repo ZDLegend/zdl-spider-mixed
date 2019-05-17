@@ -14,7 +14,7 @@ import static com.zdl.spider.mixed.zhihu.strategy.VideoStrategy.VIDEO_DRESS;
  * <p>
  * Created by ZDLegend on 2019/4/23 16:02
  */
-public class Video implements Resource  {
+public class Video implements Resource {
 
     /**
      * 视频路径
