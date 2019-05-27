@@ -1,4 +1,4 @@
-package com.zdl.spider.mixed.zhihu.entity;
+package com.zdl.spider.mixed.zhihu.dto;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * <p>
  * Created by ZDLegend on 2019/3/30 17:12
  */
-public class QuestionEntity {
+public class QuestionDto {
 
     private String id;
     private String type;
@@ -89,7 +89,7 @@ public class QuestionEntity {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        QuestionEntity that = (QuestionEntity) o;
+        QuestionDto that = (QuestionDto) o;
 
         return new EqualsBuilder()
                 .append(id, that.id)
@@ -105,7 +105,7 @@ public class QuestionEntity {
 
     @Override
     public String toString() {
-        return "QuestionEntity{" +
+        return "QuestionDto{" +
                 "id='" + id + '\'' +
                 ", type='" + type + '\'' +
                 ", name='" + name + '\'' +

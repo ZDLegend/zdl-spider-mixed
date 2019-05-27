@@ -1,7 +1,7 @@
 package com.zdl.spider.mixed.zhihu.strategy;
 
-import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
-import com.zdl.spider.mixed.zhihu.entity.AuthorEntity;
+import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
+import com.zdl.spider.mixed.zhihu.dto.AuthorDto;
 import com.zdl.spider.mixed.zhihu.parser.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -49,7 +49,7 @@ public interface AnswerStrategy<T> {
         return SearchPeopleParser.getInstance().pagingParser(content, x, authorParser -> {
             CompletableFuture[] futures = authorParser.contents()
                     .stream()
-                    .map(AuthorEntity::getUrlToken)
+                    .map(AuthorDto::getUrlToken)
                     .map(token -> getByAuthor(token, y, action))
                     .toArray(CompletableFuture[]::new);
             CompletableFuture.allOf(futures).join();
@@ -75,5 +75,5 @@ public interface AnswerStrategy<T> {
         return PeopleAnswerParser.getInstance().pagingParser(token, y, parser -> resourceHandle(action, parser));
     }
 
-    void resourceHandle(Function<T, CompletableFuture<Void>> action, ZhihuParser<AnswerEntity> parser);
+    void resourceHandle(Function<T, CompletableFuture<Void>> action, ZhihuParser<AnswerDto> parser);
 }

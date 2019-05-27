@@ -1,15 +1,15 @@
-package com.zdl.spider.mixed.zhihu.entity;
+package com.zdl.spider.mixed.zhihu.dto;
 
 /**
  * Created by ZDLegend on 2019/4/28 19:13
  */
-public class ArticleEntity {
+public class ArticleDto {
 
     private String id;
     private String type;
     private String title;
     private String url;
-    private AuthorEntity author;
+    private AuthorDto author;
 
     private String imageUrl;
 
@@ -72,11 +72,11 @@ public class ArticleEntity {
         this.url = url;
     }
 
-    public AuthorEntity getAuthor() {
+    public AuthorDto getAuthor() {
         return author;
     }
 
-    public void setAuthor(AuthorEntity author) {
+    public void setAuthor(AuthorDto author) {
         this.author = author;
     }
 

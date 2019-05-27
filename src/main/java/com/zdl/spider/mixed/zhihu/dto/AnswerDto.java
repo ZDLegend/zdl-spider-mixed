@@ -1,17 +1,17 @@
-package com.zdl.spider.mixed.zhihu.entity;
+package com.zdl.spider.mixed.zhihu.dto;
 
 /**
  * 知乎回答对象
  * <p>
  * Created by ZDLegend on 2019/4/2 17:25
  */
-public class AnswerEntity {
+public class AnswerDto {
 
     private String id;
     private String type;
     private String answerType;
-    private QuestionEntity question;
-    private AuthorEntity author;
+    private QuestionDto question;
+    private AuthorDto author;
     private String url;
     private String name;
     private long createdTime;
@@ -49,19 +49,19 @@ public class AnswerEntity {
         this.answerType = answerType;
     }
 
-    public QuestionEntity getQuestion() {
+    public QuestionDto getQuestion() {
         return question;
     }
 
-    public void setQuestion(QuestionEntity question) {
+    public void setQuestion(QuestionDto question) {
         this.question = question;
     }
 
-    public AuthorEntity getAuthor() {
+    public AuthorDto getAuthor() {
         return author;
     }
 
-    public void setAuthor(AuthorEntity author) {
+    public void setAuthor(AuthorDto author) {
         this.author = author;
     }
 

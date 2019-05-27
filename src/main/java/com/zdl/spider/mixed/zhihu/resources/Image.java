@@ -2,7 +2,7 @@ package com.zdl.spider.mixed.zhihu.resources;
 
 import com.zdl.spider.mixed.utils.FileUtil;
 import com.zdl.spider.mixed.utils.HttpUtil;
-import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
+import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
@@ -27,14 +27,14 @@ public class Image implements Resource {
     /**
      * 图片所在回答
      */
-    private AnswerEntity answerEntity;
+    private AnswerDto answerDto;
 
     private Image() {
     }
 
-    public static Image of(String path, AnswerEntity answerEntity) {
+    public static Image of(String path, AnswerDto answerDto) {
         Image image = new Image();
-        image.answerEntity = answerEntity;
+        image.answerDto = answerDto;
         image.path = path;
         image.name = path.substring(path.lastIndexOf('/') + 1);
         return image;
@@ -56,8 +56,8 @@ public class Image implements Resource {
      */
     public CompletableFuture<Void> saveByAuthorThenQuestion(String basePath) {
         String absolutePath = basePath
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName())
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle());
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getAuthor().getName())
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getQuestion().getTitle());
         return HttpUtil.downLoadFile(path, absolutePath, name);
     }
 
@@ -68,8 +68,8 @@ public class Image implements Resource {
      */
     public CompletableFuture<Void> saveByQuestionThenAuthor(String basePath) {
         String absolutePath = basePath
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle())
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName());
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getQuestion().getTitle())
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getAuthor().getName());
         return HttpUtil.downLoadFile(path, absolutePath, name);
     }
 
@@ -81,11 +81,11 @@ public class Image implements Resource {
         this.path = path;
     }
 
-    public AnswerEntity getAnswerEntity() {
-        return answerEntity;
+    public AnswerDto getAnswerDto() {
+        return answerDto;
     }
 
-    public void setAnswerEntity(AnswerEntity answerEntity) {
-        this.answerEntity = answerEntity;
+    public void setAnswerDto(AnswerDto answerDto) {
+        this.answerDto = answerDto;
     }
 }

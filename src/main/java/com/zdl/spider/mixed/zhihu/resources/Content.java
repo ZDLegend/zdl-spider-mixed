@@ -1,7 +1,7 @@
 package com.zdl.spider.mixed.zhihu.resources;
 
 import com.zdl.spider.mixed.utils.FileUtil;
-import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
+import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +24,12 @@ public class Content implements Resource {
     /**
      * 内容所在回答
      */
-    private AnswerEntity answerEntity;
+    private AnswerDto answerDto;
 
-    public static Content of(AnswerEntity answerEntity) {
+    public static Content of(AnswerDto answerDto) {
         Content content = new Content();
-        content.answerEntity = answerEntity;
-        content.name = answerEntity.getName();
+        content.answerDto = answerDto;
+        content.name = answerDto.getName();
         return content;
     }
 
@@ -39,15 +39,15 @@ public class Content implements Resource {
 
     public CompletableFuture<Void> saveByAuthorThenQuestion(String basePath) {
         String absolutePath = basePath
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName())
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle());
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getAuthor().getName())
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getQuestion().getTitle());
         return saveContent(absolutePath, name);
     }
 
     public CompletableFuture<Void> saveByQuestionThenAuthor(String basePath) {
         String absolutePath = basePath
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle())
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName());
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getQuestion().getTitle())
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getAuthor().getName());
         return saveContent(absolutePath, name);
     }
 
@@ -57,7 +57,7 @@ public class Content implements Resource {
         FileUtil.createFile(path);
         return CompletableFuture.runAsync(() -> {
             try (FileOutputStream fileOutputStream = new FileOutputStream(new File(path))) {
-                fileOutputStream.write(answerEntity.getContent().getBytes());
+                fileOutputStream.write(answerDto.getContent().getBytes());
             } catch (IOException e) {
                 logger.error("file:{}\nexception:{}", path, e.getMessage(), e);
             }

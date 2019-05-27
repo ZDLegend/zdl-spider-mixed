@@ -1,7 +1,7 @@
 package com.zdl.spider.mixed.zhihu.parser;
 
 
-import com.zdl.spider.mixed.zhihu.entity.ActivityEntity;
+import com.zdl.spider.mixed.zhihu.dto.ActivityDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,7 @@ import static com.zdl.spider.mixed.zhihu.ZhihuConst.ZHIHU_ADDRESS;
  * <p>
  * Created by ZDLegend on 2019/4/28 15:04
  */
-public class PeopleActivitiesParser extends AbstractZhihuParser<ActivityEntity> {
+public class PeopleActivitiesParser extends AbstractZhihuParser<ActivityDto> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractZhihuParser.class);
 
@@ -31,7 +31,7 @@ public class PeopleActivitiesParser extends AbstractZhihuParser<ActivityEntity> 
         return url(q, 0, 0);
     }
 
-    public CompletableFuture<ZhihuParser<ActivityEntity>> executeByQ(String q) {
+    public CompletableFuture<ZhihuParser<ActivityDto>> executeByQ(String q) {
         return execute(q, 0, 0);
     }
 
@@ -41,7 +41,7 @@ public class PeopleActivitiesParser extends AbstractZhihuParser<ActivityEntity> 
     }
 
     @Override
-    public CompletableFuture<Void> pagingParser(String q, int y, Consumer<ZhihuParser<ActivityEntity>> consumer) {
+    public CompletableFuture<Void> pagingParser(String q, int y, Consumer<ZhihuParser<ActivityDto>> consumer) {
 
         if (y <= MAX_PAGE_SIZE && y > 0) {
             return executeByQ(q)

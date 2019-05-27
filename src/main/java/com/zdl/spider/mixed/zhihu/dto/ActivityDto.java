@@ -1,4 +1,4 @@
-package com.zdl.spider.mixed.zhihu.entity;
+package com.zdl.spider.mixed.zhihu.dto;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -7,11 +7,11 @@ import com.alibaba.fastjson.JSONObject;
  * <p>
  * Created by ZDLegend on 2019/4/28 15:10
  */
-public class ActivityEntity {
+public class ActivityDto {
 
     private String id;
     private String actionText;
-    private AuthorEntity actor;
+    private AuthorDto actor;
     private long createdTime;
     private JSONObject target;
     private String type;
@@ -33,11 +33,11 @@ public class ActivityEntity {
         this.actionText = actionText;
     }
 
-    public AuthorEntity getActor() {
+    public AuthorDto getActor() {
         return actor;
     }
 
-    public void setActor(AuthorEntity actor) {
+    public void setActor(AuthorDto actor) {
         this.actor = actor;
     }
 

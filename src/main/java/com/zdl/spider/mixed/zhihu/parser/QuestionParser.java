@@ -1,6 +1,6 @@
 package com.zdl.spider.mixed.zhihu.parser;
 
-import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
+import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +10,7 @@ import static com.zdl.spider.mixed.zhihu.ZhihuConst.ZHIHU_ADDRESS;
 /**
  * Created by ZDLegend on 2019/4/1 15:28
  */
-public class QuestionParser extends AbstractZhihuParser<AnswerEntity> {
+public class QuestionParser extends AbstractZhihuParser<AnswerDto> {
 
     private static final Logger logger = LoggerFactory.getLogger(QuestionParser.class);
 

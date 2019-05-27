@@ -2,7 +2,7 @@ package com.zdl.spider.mixed.zhihu.strategy;
 
 import com.zdl.spider.mixed.utils.JsoupUtil;
 import com.zdl.spider.mixed.zhihu.resources.Image;
-import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
+import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.parser.ZhihuParser;
 
 import java.util.concurrent.CompletableFuture;
@@ -34,7 +34,7 @@ public class ImageStrategy implements AnswerStrategy<Image> {
     }
 
     @Override
-    public void resourceHandle(Function<Image, CompletableFuture<Void>> action, ZhihuParser<AnswerEntity> parser) {
+    public void resourceHandle(Function<Image, CompletableFuture<Void>> action, ZhihuParser<AnswerDto> parser) {
         CompletableFuture[] futures = parser.contents()
                 .stream()
                 .flatMap(answer -> JsoupUtil.getImageAddrByHtml(answer.getContent()).stream().map(s -> Image.of(s, answer)))

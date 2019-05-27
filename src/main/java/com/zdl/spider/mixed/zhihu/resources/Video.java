@@ -1,7 +1,7 @@
 package com.zdl.spider.mixed.zhihu.resources;
 
 import com.zdl.spider.mixed.utils.FileUtil;
-import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
+import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.strategy.VideoStrategy;
 
 import java.io.File;
@@ -29,23 +29,23 @@ public class Video implements Resource {
     /**
      * 视频所在回答
      */
-    private AnswerEntity answerEntity;
+    private AnswerDto answerDto;
 
     private Video() {
     }
 
-    public static Video of(String path, AnswerEntity answerEntity) {
+    public static Video of(String path, AnswerDto answerDto) {
         Video video = new Video();
-        video.answerEntity = answerEntity;
+        video.answerDto = answerDto;
         video.path = path;
         video.name = path.substring(path.lastIndexOf('/') + 1) + ".mp4";
         return video;
     }
 
-    public static Video ofId(String id, AnswerEntity answerEntity) {
+    public static Video ofId(String id, AnswerDto answerDto) {
         Video video = new Video();
         String path = String.format(VIDEO_DRESS, id);
-        video.answerEntity = answerEntity;
+        video.answerDto = answerDto;
         video.path = path;
         video.name = id + ".mp4";
         return video;
@@ -67,8 +67,8 @@ public class Video implements Resource {
      */
     public CompletableFuture<Void> saveByAuthorThenQuestion(String basePath) {
         String absolutePath = basePath
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName())
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle());
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getAuthor().getName())
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getQuestion().getTitle());
         return VideoStrategy.videoDownload(path, absolutePath, name);
     }
 
@@ -79,8 +79,8 @@ public class Video implements Resource {
      */
     public CompletableFuture<Void> saveByQuestionThenAuthor(String basePath) {
         String absolutePath = basePath
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getQuestion().getTitle())
-                + File.separator + FileUtil.removeIllegalWord(answerEntity.getAuthor().getName());
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getQuestion().getTitle())
+                + File.separator + FileUtil.removeIllegalWord(answerDto.getAuthor().getName());
         return VideoStrategy.videoDownload(path, absolutePath, name);
     }
 
@@ -100,11 +100,11 @@ public class Video implements Resource {
         this.name = name;
     }
 
-    public AnswerEntity getAnswerEntity() {
-        return answerEntity;
+    public AnswerDto getAnswerDto() {
+        return answerDto;
     }
 
-    public void setAnswerEntity(AnswerEntity answerEntity) {
-        this.answerEntity = answerEntity;
+    public void setAnswerDto(AnswerDto answerDto) {
+        this.answerDto = answerDto;
     }
 }

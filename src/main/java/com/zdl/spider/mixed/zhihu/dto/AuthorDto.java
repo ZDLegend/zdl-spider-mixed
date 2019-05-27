@@ -1,4 +1,4 @@
-package com.zdl.spider.mixed.zhihu.entity;
+package com.zdl.spider.mixed.zhihu.dto;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * <p>
  * Created by ZDLegend on 2019/3/30 17:15
  */
-public class AuthorEntity {
+public class AuthorDto {
 
     private String id;
     private String urlToken;
@@ -170,7 +170,7 @@ public class AuthorEntity {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        AuthorEntity that = (AuthorEntity) o;
+        AuthorDto that = (AuthorDto) o;
 
         return new EqualsBuilder()
                 .append(id, that.id)

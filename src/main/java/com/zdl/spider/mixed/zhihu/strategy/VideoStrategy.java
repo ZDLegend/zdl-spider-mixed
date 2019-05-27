@@ -5,7 +5,7 @@ import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.utils.JsoupUtil;
 import com.zdl.spider.mixed.zhihu.ZhihuConst;
 import com.zdl.spider.mixed.zhihu.resources.Video;
-import com.zdl.spider.mixed.zhihu.entity.AnswerEntity;
+import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.parser.ZhihuParser;
 
 import java.util.concurrent.CompletableFuture;
@@ -42,7 +42,7 @@ public class VideoStrategy implements AnswerStrategy<Video> {
     }
 
     @Override
-    public void resourceHandle(Function<Video, CompletableFuture<Void>> action, ZhihuParser<AnswerEntity> parser) {
+    public void resourceHandle(Function<Video, CompletableFuture<Void>> action, ZhihuParser<AnswerDto> parser) {
         CompletableFuture[] futures = parser.contents()
                 .stream()
                 .flatMap(answer -> JsoupUtil.getAddrByHtml(answer.getContent()).values().stream()
