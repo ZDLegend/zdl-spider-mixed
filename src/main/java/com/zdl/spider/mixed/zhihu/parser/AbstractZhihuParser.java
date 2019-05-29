@@ -2,7 +2,7 @@ package com.zdl.spider.mixed.zhihu.parser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.ClassUtil;
-import com.zdl.spider.mixed.zhihu.Page;
+import com.zdl.spider.mixed.zhihu.dto.PageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,13 +19,13 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
     private static final Logger logger = LoggerFactory.getLogger(AbstractZhihuParser.class);
     private static final int MAX_PAGE_SIZE = 10;
 
-    Page page;
+    PageDto pageDto;
     List<T> contents;
 
     @SuppressWarnings("unchecked")
     @Override
     public ZhihuParser<T> parser(ZhihuParser<T> parser, JSONObject json) {
-        page = JSONObject.parseObject(json.getString("paging"), Page.class);
+        pageDto = JSONObject.parseObject(json.getString("paging"), PageDto.class);
         contents = json.getJSONArray("data")
                 .stream()
                 .map(o -> (JSONObject) o)
@@ -40,8 +40,8 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
     }
 
     @Override
-    public Page page() {
-        return page;
+    public PageDto page() {
+        return pageDto;
     }
 
     public CompletableFuture<Void> pagingParser(String q, int deep, Consumer<ZhihuParser<T>> consumer) {

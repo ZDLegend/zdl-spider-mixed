@@ -2,7 +2,7 @@ package com.zdl.spider.mixed.zhihu.parser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.ClassUtil;
-import com.zdl.spider.mixed.zhihu.Page;
+import com.zdl.spider.mixed.zhihu.dto.PageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public abstract class AbstractZhihuSearchParser<T> extends AbstractZhihuParser<T
     @SuppressWarnings("unchecked")
     @Override
     public ZhihuParser<T> parser(ZhihuParser<T> parser, JSONObject json) {
-        page = JSONObject.parseObject(json.getString("paging"), Page.class);
+        pageDto = JSONObject.parseObject(json.getString("paging"), PageDto.class);
         contents = json.getJSONArray("data")
                 .stream()
                 .map(o -> (JSONObject) o)

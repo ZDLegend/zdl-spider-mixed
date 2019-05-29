@@ -1,9 +1,9 @@
-package com.zdl.spider.mixed.zhihu;
+package com.zdl.spider.mixed.zhihu.dto;
 
 /**
  * Created by ZDLegend on 2019/4/1 9:29
  */
-public class Page {
+public class PageDto {
 
     private boolean isEnd;
     private boolean isStart;

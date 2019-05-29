@@ -2,7 +2,7 @@ package com.zdl.spider.mixed.zhihu.parser;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
-import com.zdl.spider.mixed.zhihu.Page;
+import com.zdl.spider.mixed.zhihu.dto.PageDto;
 import com.zdl.spider.mixed.zhihu.ZhihuConst;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public interface ZhihuParser<T> {
     List<T> contents();
 
     /**
-     * get page info
+     * get pageDto info
      */
-    Page page();
+    PageDto page();
 }
