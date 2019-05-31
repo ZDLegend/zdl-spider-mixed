@@ -1,5 +1,8 @@
 package com.zdl.spider.mixed.zhihu.dto;
 
+import com.zdl.spider.mixed.zhihu.web.entity.AnswerEntity;
+import org.springframework.beans.BeanUtils;
+
 /**
  * 知乎回答对象
  * <p>
@@ -24,6 +27,21 @@ public class AnswerDto {
     private int commentCount;
 
     private String content;
+
+    public static AnswerEntity toEntity(AnswerDto dto) {
+        AnswerEntity answerEntity = new AnswerEntity();
+        BeanUtils.copyProperties(dto, answerEntity);
+
+        if(dto.author != null) {
+            answerEntity.setAuthorId(dto.author.getId());
+        }
+
+        if(dto.question != null) {
+            answerEntity.setAuthorId(dto.question.getId());
+        }
+        
+        return answerEntity;
+    }
 
     public String getId() {
         return id;
