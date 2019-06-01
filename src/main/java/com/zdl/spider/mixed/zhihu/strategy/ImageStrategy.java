@@ -1,9 +1,9 @@
 package com.zdl.spider.mixed.zhihu.strategy;
 
 import com.zdl.spider.mixed.utils.JsoupUtil;
-import com.zdl.spider.mixed.zhihu.resources.Image;
 import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.parser.ZhihuParser;
+import com.zdl.spider.mixed.zhihu.resources.Image;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;

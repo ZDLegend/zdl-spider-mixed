@@ -32,14 +32,14 @@ public class AnswerDto {
         AnswerEntity answerEntity = new AnswerEntity();
         BeanUtils.copyProperties(dto, answerEntity);
 
-        if(dto.author != null) {
+        if (dto.author != null) {
             answerEntity.setAuthorId(dto.author.getId());
         }
 
-        if(dto.question != null) {
+        if (dto.question != null) {
             answerEntity.setAuthorId(dto.question.getId());
         }
-        
+
         return answerEntity;
     }
 

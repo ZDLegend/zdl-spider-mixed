@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.HttpUtil;
 import com.zdl.spider.mixed.utils.JsoupUtil;
 import com.zdl.spider.mixed.zhihu.ZhihuConst;
-import com.zdl.spider.mixed.zhihu.resources.Video;
 import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.parser.ZhihuParser;
+import com.zdl.spider.mixed.zhihu.resources.Video;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
