@@ -1,6 +1,9 @@
 package com.zdl.spider.mixed.zhihu.web.service;
 
+import org.hibernate.JDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.CannotAcquireLockException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.persistence.EntityManager;
@@ -20,7 +23,19 @@ public abstract class AbstractService<E> {
     }
 
     public E insert(E entity) {
-        entityManager.persist(entity);
+        try{
+            entityManager.persist(entity);
+        } catch (CannotAcquireLockException e) {
+            return insert(entity);
+        } catch (DataIntegrityViolationException e) {
+            if(e.getCause() instanceof JDBCException
+                    && ((JDBCException)e.getCause()).getSQLException().getMessage().contains("duplicate key")) {
+                return insert(entity);
+            } else {
+                throw e;
+            }
+        }
+
         return entity;
     }
 
