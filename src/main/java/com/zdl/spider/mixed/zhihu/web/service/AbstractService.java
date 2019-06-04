@@ -23,13 +23,13 @@ public abstract class AbstractService<E> {
     }
 
     public E insert(E entity) {
-        try{
+        try {
             entityManager.persist(entity);
         } catch (CannotAcquireLockException e) {
             return insert(entity);
         } catch (DataIntegrityViolationException e) {
-            if(e.getCause() instanceof JDBCException
-                    && ((JDBCException)e.getCause()).getSQLException().getMessage().contains("duplicate key")) {
+            if (e.getCause() instanceof JDBCException
+                    && ((JDBCException) e.getCause()).getSQLException().getMessage().contains("duplicate key")) {
                 return insert(entity);
             } else {
                 throw e;
