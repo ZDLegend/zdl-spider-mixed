@@ -25,6 +25,8 @@ public class SpouseEntity {
     //体重
     private Integer weight;
 
+    private String province;
+
     //回答内容
     private String content;
 
@@ -74,6 +76,14 @@ public class SpouseEntity {
 
     public void setWeight(Integer weight) {
         this.weight = weight;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getContent() {
