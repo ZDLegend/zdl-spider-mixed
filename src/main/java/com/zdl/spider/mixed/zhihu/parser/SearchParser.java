@@ -32,7 +32,7 @@ public class SearchParser extends AbstractZhihuSearchParser<AnswerDto> {
     }
 
     public static void main(String[] args) {
-        var search = getInstance().execute("健身", 0, 1).join();
+        var search = getInstance().execute("择偶标准", 0, 1).join();
         logger.debug("{}", search);
     }
 }
