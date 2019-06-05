@@ -28,6 +28,9 @@ public class SpouseEntity {
     //所在地区
     private String province;
 
+    //城市
+    private String city;
+
     //回答内容
     private String content;
 
@@ -85,6 +88,14 @@ public class SpouseEntity {
 
     public void setProvince(String province) {
         this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getContent() {
