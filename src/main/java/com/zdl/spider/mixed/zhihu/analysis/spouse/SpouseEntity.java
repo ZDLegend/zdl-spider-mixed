@@ -19,12 +19,13 @@ public class SpouseEntity {
     //年龄
     private Integer age;
 
-    //升高
+    //身高
     private Integer high;
 
     //体重
     private Integer weight;
 
+    //所在地区
     private String province;
 
     //回答内容
