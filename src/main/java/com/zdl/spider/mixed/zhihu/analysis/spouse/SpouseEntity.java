@@ -31,6 +31,13 @@ public class SpouseEntity {
     //城市
     private String city;
 
+    //学历
+    private String education;
+
+    private boolean is211;
+
+    private boolean is985;
+
     //回答内容
     private String content;
 
@@ -96,6 +103,30 @@ public class SpouseEntity {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public boolean isIs211() {
+        return is211;
+    }
+
+    public void setIs211(boolean is211) {
+        this.is211 = is211;
+    }
+
+    public boolean isIs985() {
+        return is985;
+    }
+
+    public void setIs985(boolean is985) {
+        this.is985 = is985;
     }
 
     public String getContent() {
