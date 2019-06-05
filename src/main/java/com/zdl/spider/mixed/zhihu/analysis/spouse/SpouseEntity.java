@@ -1,7 +1,5 @@
 package com.zdl.spider.mixed.zhihu.analysis.spouse;
 
-import java.util.Date;
-
 /**
  * 择偶标准实体类
  *
@@ -18,8 +16,8 @@ public class SpouseEntity {
     //性别 0女 1男 2未知
     private int gender;
 
-    //出生
-    private Date born;
+    //年龄
+    private Integer age;
 
     //升高
     private Integer high;
@@ -54,12 +52,12 @@ public class SpouseEntity {
         this.gender = gender;
     }
 
-    public Date getBorn() {
-        return born;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setBorn(Date born) {
-        this.born = born;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     public Integer getHigh() {
