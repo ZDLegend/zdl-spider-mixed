@@ -14,7 +14,7 @@ public class SpouseEntity {
     private String authorId;
 
     //性别 0女 1男 2未知
-    private int gender;
+    private Integer gender;
 
     //年龄
     private Integer age;
@@ -57,11 +57,11 @@ public class SpouseEntity {
         this.authorId = authorId;
     }
 
-    public int getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
