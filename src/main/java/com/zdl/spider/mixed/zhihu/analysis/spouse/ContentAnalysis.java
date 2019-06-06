@@ -40,12 +40,17 @@ public class ContentAnalysis {
     private static void analysisGender(String sem, SpouseEntity spouseEntity) {
         if(spouseEntity.getGender() == null || spouseEntity.getGender() == 2) {
 
-            if(sem.contains("本人女") || sem.startsWith("女") || sem.contains("性别女") || sem.contains("：女")) {
+            if(sem.contains("本人女")
+                    || sem.startsWith("女")
+                    || sem.contains("性别女")
+                    || sem.contains("：女")
+                    || sem.contains("，女")) {
                 spouseEntity.setGender(0);
                 return;
             }
 
-            if(sem.contains("本人男") || sem.startsWith("男") || sem.contains("性别男") || sem.contains("：男")) {
+            if(sem.contains("本人男") || sem.startsWith("男")
+                    || sem.contains("性别男") || sem.contains("：男") || sem.contains("，男")) {
                 spouseEntity.setGender(1);
             }
         }
