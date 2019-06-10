@@ -2,7 +2,7 @@ package com.zdl.spider.mixed.zhihu.analysis.spouse;
 
 /**
  * 择偶标准实体类
- *
+ * <p>
  * Created by ZDLegend on 2019/6/5 10:58
  */
 public class SpouseEntity {
