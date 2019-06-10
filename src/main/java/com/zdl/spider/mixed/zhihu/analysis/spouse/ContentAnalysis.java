@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 /**
  * 回答内容解析
- *
+ * <p>
  * Created by ZDLegend on 2019/6/5 11:23
  */
 public class ContentAnalysis {
@@ -38,19 +38,14 @@ public class ContentAnalysis {
     }
 
     private static void analysisGender(String sem, SpouseEntity spouseEntity) {
-        if(spouseEntity.getGender() == null || spouseEntity.getGender() == 2) {
-
-            if(sem.contains("本人女")
-                    || sem.startsWith("女")
-                    || sem.contains("性别女")
-                    || sem.contains("：女")
-                    || sem.contains("，女")) {
+        if (spouseEntity.getGender() == null || spouseEntity.getGender() == 2) {
+            if (sem.contains("本人女") || sem.startsWith("女")
+                    || sem.contains("性别女") || sem.contains("：女")
+                    || sem.contains("，女") || sem.contains("女，")) {
                 spouseEntity.setGender(0);
-                return;
-            }
-
-            if(sem.contains("本人男") || sem.startsWith("男")
-                    || sem.contains("性别男") || sem.contains("：男") || sem.contains("，男")) {
+            } else if (sem.contains("本人男") || sem.startsWith("男")
+                    || sem.contains("性别男") || sem.contains("：男")
+                    || sem.contains("，男") || sem.contains("男，")) {
                 spouseEntity.setGender(1);
             }
         }
