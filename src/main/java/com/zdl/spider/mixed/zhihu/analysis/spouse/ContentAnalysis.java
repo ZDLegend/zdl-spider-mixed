@@ -52,7 +52,9 @@ public class ContentAnalysis {
     }
 
     private static void analysisAge(String sem, SpouseEntity spouseEntity) {
+        if(spouseEntity.getAge() == null) {
 
+        }
     }
 
     private static void analysisHigh(String sem, SpouseEntity spouseEntity) {
