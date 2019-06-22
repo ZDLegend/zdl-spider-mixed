@@ -99,7 +99,9 @@ public class ContentAnalysis {
     }
 
     private static void analysisEarth(String sem, SpouseEntity spouseEntity) {
+        if (spouseEntity.getCity() == null) {
 
+        }
     }
 
     private static void analysisEducation(String sem, SpouseEntity spouseEntity) {
