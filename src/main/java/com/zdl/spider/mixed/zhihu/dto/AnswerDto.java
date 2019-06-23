@@ -3,6 +3,8 @@ package com.zdl.spider.mixed.zhihu.dto;
 import com.zdl.spider.mixed.zhihu.web.entity.AnswerEntity;
 import org.springframework.beans.BeanUtils;
 
+import static com.zdl.spider.mixed.zhihu.ZhihuConst.ANONYMOUS_USER;
+
 /**
  * 知乎回答对象
  * <p>
@@ -32,7 +34,7 @@ public class AnswerDto {
         AnswerEntity answerEntity = new AnswerEntity();
         BeanUtils.copyProperties(dto, answerEntity);
 
-        if (dto.author != null) {
+        if (dto.author != null && !ANONYMOUS_USER.equals(dto.author.getName())) {
             answerEntity.setAuthorId(dto.author.getId());
         }
 

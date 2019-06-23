@@ -1,6 +1,9 @@
 package com.zdl.spider.mixed.zhihu.analysis.spouse;
 
 import com.zdl.spider.mixed.utils.StringUtil;
+import com.zdl.spider.mixed.zhihu.dto.AuthorDto;
+import com.zdl.spider.mixed.zhihu.parser.ZhihuApi;
+import com.zdl.spider.mixed.zhihu.web.entity.AnswerEntity;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
@@ -14,6 +17,23 @@ import java.util.stream.Stream;
  * Created by ZDLegend on 2019/6/5 11:23
  */
 public class ContentAnalysis {
+
+    public static SpouseEntity getSpouse(AnswerEntity answerEntity) {
+        SpouseEntity spouseEntity = new SpouseEntity();
+        spouseEntity.setId(answerEntity.getQuestionId() + "_" + answerEntity.getId());
+        spouseEntity.setAuthorId(answerEntity.getAuthorId());
+
+        if(StringUtils.isNotBlank(answerEntity.getAuthorId())) {
+            AuthorDto authorDto = ZhihuApi.getPeopleInfo(answerEntity.getAuthorId()).join();
+            if (authorDto != null && StringUtils.isNotBlank(authorDto.getGender())) {
+                spouseEntity.setGender(Integer.valueOf(authorDto.getGender()));
+            }
+        }
+
+        analysis(answerEntity.getContent(), spouseEntity);
+
+        return spouseEntity;
+    }
 
     public static SpouseEntity analysis(String content, SpouseEntity spouseEntity) {
 
