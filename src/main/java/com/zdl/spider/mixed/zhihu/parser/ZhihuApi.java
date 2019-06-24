@@ -16,6 +16,10 @@ public class ZhihuApi {
 
     private static final String PEOPLE_INFO_API = ZHIHU_API_ADDRESS + "people/%s";
 
+    private ZhihuApi() {
+        //do nothing
+    }
+
     public static CompletableFuture<AuthorDto> getPeopleInfo(String peopleId) {
         var url = String.format(PEOPLE_INFO_API, peopleId);
         return HttpUtil.get(url, getJsonHeaders(), s -> JSON.parseObject(s, AuthorDto.class));

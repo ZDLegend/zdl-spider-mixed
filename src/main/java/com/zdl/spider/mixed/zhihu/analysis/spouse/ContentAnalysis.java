@@ -23,7 +23,7 @@ public class ContentAnalysis {
         spouseEntity.setId(answerEntity.getQuestionId() + "_" + answerEntity.getId());
         spouseEntity.setAuthorId(answerEntity.getAuthorId());
 
-        if(StringUtils.isNotBlank(answerEntity.getAuthorId())) {
+        if (StringUtils.isNotBlank(answerEntity.getAuthorId())) {
             AuthorDto authorDto = ZhihuApi.getPeopleInfo(answerEntity.getAuthorId()).join();
             if (authorDto != null && StringUtils.isNotBlank(authorDto.getGender())) {
                 spouseEntity.setGender(Integer.valueOf(authorDto.getGender()));
