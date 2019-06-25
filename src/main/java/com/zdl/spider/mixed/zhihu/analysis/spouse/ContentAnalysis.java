@@ -57,7 +57,7 @@ public class ContentAnalysis {
         //通过关键字，一段一段解析
         list.forEach(s -> {
 
-            if(s.contains("要求：") || s.contains("希望你：") || s.contains("要求，") || s.contains("希望你，")) {
+            if (s.contains("要求：") || s.contains("希望你：") || s.contains("要求，") || s.contains("希望你，")) {
                 return;
             }
 
@@ -103,7 +103,7 @@ public class ContentAnalysis {
                 } else if (s2.isEmpty()) {
                     spouseEntity.setAge(LocalDate.now().getYear() - (s1.get(0) + 1900));
                 } else {
-                    spouseEntity.setAge(LocalDate.now().getYear() -s1.get(0));
+                    spouseEntity.setAge(LocalDate.now().getYear() - s1.get(0));
                 }
             }
         }
@@ -123,7 +123,7 @@ public class ContentAnalysis {
 
     private static void analysisWeigh(String sem, SpouseEntity spouseEntity) {
         if (spouseEntity.getWeight() == null && (sem.contains("体重") || sem.contains("kg") || sem.contains("g") || sem.contains("/"))) {
-            if(sem.contains("kg")) {
+            if (sem.contains("kg")) {
                 List<Integer> list = StringUtil.getDigit(sem)
                         .stream()
                         .filter(i -> i >= 35 && i <= 100)
@@ -166,7 +166,7 @@ public class ContentAnalysis {
             }
         }
 
-        if(spouseEntity.getIs985() == null) {
+        if (spouseEntity.getIs985() == null) {
             if (sem.contains("985") || sem.contains("某top")) {
                 spouseEntity.setIs985(true);
                 spouseEntity.setIs211(true);
