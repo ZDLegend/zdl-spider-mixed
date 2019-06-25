@@ -29,7 +29,7 @@ public class QuestionParser extends AbstractZhihuParser<AnswerDto> {
     }
 
     public static void main(String[] args) {
-        var question = getInstance().execute("36351193", 0, 20).join();
+        var question = getInstance().execute("275359100", 0, 20).join();
         logger.debug("{}", question);
     }
 }

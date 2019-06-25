@@ -1,7 +1,9 @@
 package com.zdl.spider.mixed.zhihu.analysis.spouse;
 
 import com.zdl.spider.mixed.utils.StringUtil;
+import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.dto.AuthorDto;
+import com.zdl.spider.mixed.zhihu.parser.QuestionParser;
 import com.zdl.spider.mixed.zhihu.parser.ZhihuApi;
 import com.zdl.spider.mixed.zhihu.web.entity.AnswerEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +19,14 @@ import java.util.stream.Stream;
  * Created by ZDLegend on 2019/6/5 11:23
  */
 public class ContentAnalysis {
+
+    public static void main(String[] args) {
+        List<SpouseEntity> list = QuestionParser.getInstance()
+                .execute("275359100", 0, 20)
+                .thenApply(z -> z.contents().stream().map(AnswerDto::toEntity).map(ContentAnalysis::getSpouse).collect(Collectors.toList())).join();
+
+        System.out.println(list);
+    }
 
     public static SpouseEntity getSpouse(AnswerEntity answerEntity) {
         SpouseEntity spouseEntity = new SpouseEntity();
@@ -46,6 +56,11 @@ public class ContentAnalysis {
 
         //通过关键字，一段一段解析
         list.forEach(s -> {
+
+            if(s.contains("要求：") || s.contains("希望你：")) {
+                return;
+            }
+
             analysisGender(s, spouseEntity);
             analysisAge(s, spouseEntity);
             analysisHigh(s, spouseEntity);
@@ -88,7 +103,7 @@ public class ContentAnalysis {
                 } else if (s2.isEmpty()) {
                     spouseEntity.setAge(LocalDate.now().getYear() - (s1.get(0) + 1900));
                 } else {
-                    spouseEntity.setAge(LocalDate.now().getYear() - (s1.get(0)));
+                    spouseEntity.setAge(LocalDate.now().getYear() -s1.get(0));
                 }
             }
         }
@@ -100,20 +115,30 @@ public class ContentAnalysis {
                     .stream()
                     .filter(i -> i >= 140 && i <= 199)
                     .collect(Collectors.toList());
-            if (!list.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/"))) {
+            if (!list.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/") || sem.contains("cm"))) {
                 spouseEntity.setHigh(list.get(0));
             }
         }
     }
 
     private static void analysisWeigh(String sem, SpouseEntity spouseEntity) {
-        if (spouseEntity.getWeight() == null) {
-            List<Integer> list = StringUtil.getDigit(sem)
-                    .stream()
-                    .filter(i -> i >= 70 && i <= 200)
-                    .collect(Collectors.toList());
-            if (!list.isEmpty()) {
-                spouseEntity.setWeight(list.get(list.size() - 1));
+        if (spouseEntity.getWeight() == null && (sem.contains("体重") || sem.contains("kg") || sem.contains("g") || sem.contains("/"))) {
+            if(sem.contains("kg")) {
+                List<Integer> list = StringUtil.getDigit(sem)
+                        .stream()
+                        .filter(i -> i >= 35 && i <= 100)
+                        .collect(Collectors.toList());
+                if (!list.isEmpty()) {
+                    spouseEntity.setWeight((list.get(list.size() - 1)) * 2);
+                }
+            } else {
+                List<Integer> list = StringUtil.getDigit(sem)
+                        .stream()
+                        .filter(i -> i >= 70 && i <= 200)
+                        .collect(Collectors.toList());
+                if (!list.isEmpty()) {
+                    spouseEntity.setWeight(list.get(list.size() - 1));
+                }
             }
         }
     }
@@ -126,18 +151,7 @@ public class ContentAnalysis {
 
     private static void analysisEducation(String sem, SpouseEntity spouseEntity) {
         if (spouseEntity.getEducation() == null) {
-            if (sem.contains("985") || sem.contains("某top")) {
-                spouseEntity.setIs985(true);
-                spouseEntity.setIs211(true);
-            } else if (sem.contains("211")) {
-                spouseEntity.setIs985(false);
-                spouseEntity.setIs211(true);
-            } else {
-                spouseEntity.setIs985(false);
-                spouseEntity.setIs211(false);
-            }
-
-            if (sem.contains("本科")) {
+            if (sem.contains("本科") || sem.contains("专升本")) {
                 spouseEntity.setEducation("本科");
             } else if (sem.contains("大专")) {
                 spouseEntity.setEducation("大专");
@@ -147,8 +161,21 @@ public class ContentAnalysis {
                 spouseEntity.setEducation("硕士");
             } else if (sem.contains("博士") || sem.contains("硕博") || sem.contains("读博")) {
                 spouseEntity.setEducation("博士");
-            } else {
+            } else if (sem.contains("高中")) {
                 spouseEntity.setEducation("高中或高中以下");
+            }
+        }
+
+        if(spouseEntity.getIs985() == null) {
+            if (sem.contains("985") || sem.contains("某top")) {
+                spouseEntity.setIs985(true);
+                spouseEntity.setIs211(true);
+            } else if (sem.contains("211")) {
+                spouseEntity.setIs985(false);
+                spouseEntity.setIs211(true);
+            } else {
+                spouseEntity.setIs985(false);
+                spouseEntity.setIs211(false);
             }
         }
     }

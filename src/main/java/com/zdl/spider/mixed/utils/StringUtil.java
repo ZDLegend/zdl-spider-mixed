@@ -22,6 +22,7 @@ public class StringUtil {
         String[] cs = Pattern.compile("[^0-9]+").split(content);
         return Stream.of(cs).distinct()
                 .filter(StringUtils::isNotBlank)
+                .filter(s -> s.length() < 5)
                 .map(Integer::valueOf)
                 .collect(Collectors.toList());
     }
