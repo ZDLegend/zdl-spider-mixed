@@ -57,7 +57,7 @@ public class ContentAnalysis {
         //通过关键字，一段一段解析
         list.forEach(s -> {
 
-            if(s.contains("要求：") || s.contains("希望你：")) {
+            if(s.contains("要求：") || s.contains("希望你：") || s.contains("要求，") || s.contains("希望你，")) {
                 return;
             }
 
