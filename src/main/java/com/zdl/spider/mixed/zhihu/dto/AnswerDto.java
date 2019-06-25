@@ -39,7 +39,7 @@ public class AnswerDto {
         }
 
         if (dto.question != null) {
-            answerEntity.setAuthorId(dto.question.getId());
+            answerEntity.setQuestionId(dto.question.getId());
         }
 
         return answerEntity;
