@@ -94,21 +94,19 @@ public class ContentAnalysis {
     }
 
     private static void analysisAge(String sem, SpouseEntity spouseEntity, List<Integer> list) {
-        if (spouseEntity.getAge() == null) {
-            if (sem.contains("年")) {
-                List<Integer> s1 = list.stream().filter(i -> i >= 70 && i <= 99).collect(Collectors.toList());
-                List<Integer> s2 = list.stream().filter(i -> i >= 1970 && i <= 2019).collect(Collectors.toList());
-                if (s1.isEmpty() && s2.isEmpty()) {
-                    if (list.contains(0)) {
-                        spouseEntity.setAge(LocalDate.now().getYear() - 2000);
-                    } else if (list.contains(1)) {
-                        spouseEntity.setAge(LocalDate.now().getYear() - 2001);
-                    }
-                } else if (s2.isEmpty()) {
-                    spouseEntity.setAge(LocalDate.now().getYear() - (s1.get(0) + 1900));
-                } else {
-                    spouseEntity.setAge(LocalDate.now().getYear() - s1.get(0));
+        if (spouseEntity.getAge() == null && sem.contains("年")) {
+            List<Integer> s1 = list.stream().filter(i -> i >= 70 && i <= 99).collect(Collectors.toList());
+            List<Integer> s2 = list.stream().filter(i -> i >= 1970 && i <= 2019).collect(Collectors.toList());
+            if (s1.isEmpty() && s2.isEmpty()) {
+                if (list.contains(0)) {
+                    spouseEntity.setAge(LocalDate.now().getYear() - 2000);
+                } else if (list.contains(1)) {
+                    spouseEntity.setAge(LocalDate.now().getYear() - 2001);
                 }
+            } else if (s2.isEmpty()) {
+                spouseEntity.setAge(LocalDate.now().getYear() - (s1.get(0) + 1900));
+            } else {
+                spouseEntity.setAge(LocalDate.now().getYear() - s1.get(0));
             }
         }
     }
