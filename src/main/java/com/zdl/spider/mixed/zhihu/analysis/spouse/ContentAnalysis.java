@@ -62,9 +62,12 @@ public class ContentAnalysis {
             }
 
             analysisGender(s, spouseEntity);
-            analysisAge(s, spouseEntity);
-            analysisHigh(s, spouseEntity);
-            analysisWeigh(s, spouseEntity);
+
+            List<Integer> i = StringUtil.getDigit(s);
+
+            analysisAge(s, spouseEntity, i);
+            analysisHigh(s, spouseEntity, i);
+            analysisWeigh(s, spouseEntity, i);
             analysisEarth(s, spouseEntity);
             analysisEducation(s, spouseEntity);
         });
@@ -78,19 +81,20 @@ public class ContentAnalysis {
         if (spouseEntity.getGender() == null || spouseEntity.getGender() == 2) {
             if (sem.contains("本人女") || sem.startsWith("女")
                     || sem.contains("性别女") || sem.contains("：女")
-                    || sem.contains("，女") || sem.contains("女，")) {
+                    || sem.contains("，女") || sem.contains("女，")
+                    || sem.contains("男朋友")) {
                 spouseEntity.setGender(0);
             } else if (sem.contains("本人男") || sem.startsWith("男")
                     || sem.contains("性别男") || sem.contains("：男")
-                    || sem.contains("，男") || sem.contains("男，")) {
+                    || sem.contains("，男") || sem.contains("男，")
+                    || sem.contains("女朋友")) {
                 spouseEntity.setGender(1);
             }
         }
     }
 
-    private static void analysisAge(String sem, SpouseEntity spouseEntity) {
+    private static void analysisAge(String sem, SpouseEntity spouseEntity, List<Integer> list) {
         if (spouseEntity.getAge() == null) {
-            List<Integer> list = StringUtil.getDigit(sem);
             if (sem.contains("年")) {
                 List<Integer> s1 = list.stream().filter(i -> i >= 70 && i <= 99).collect(Collectors.toList());
                 List<Integer> s2 = list.stream().filter(i -> i >= 1970 && i <= 2019).collect(Collectors.toList());
@@ -109,35 +113,34 @@ public class ContentAnalysis {
         }
     }
 
-    private static void analysisHigh(String sem, SpouseEntity spouseEntity) {
+    private static void analysisHigh(String sem, SpouseEntity spouseEntity, List<Integer> list) {
         if (spouseEntity.getHigh() == null) {
-            List<Integer> list = StringUtil.getDigit(sem)
-                    .stream()
+            List<Integer> s = list.stream()
                     .filter(i -> i >= 140 && i <= 199)
                     .collect(Collectors.toList());
-            if (!list.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/") || sem.contains("cm"))) {
+            if (!s.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/") || sem.contains("cm"))) {
                 spouseEntity.setHigh(list.get(0));
             }
         }
     }
 
-    private static void analysisWeigh(String sem, SpouseEntity spouseEntity) {
+    private static void analysisWeigh(String sem, SpouseEntity spouseEntity, List<Integer> list) {
         if (spouseEntity.getWeight() == null && (sem.contains("体重") || sem.contains("kg") || sem.contains("g") || sem.contains("/"))) {
             if (sem.contains("kg")) {
-                List<Integer> list = StringUtil.getDigit(sem)
+                List<Integer> s = list
                         .stream()
                         .filter(i -> i >= 35 && i <= 100)
                         .collect(Collectors.toList());
-                if (!list.isEmpty()) {
-                    spouseEntity.setWeight((list.get(list.size() - 1)) * 2);
+                if (!s.isEmpty()) {
+                    spouseEntity.setWeight((s.get(s.size() - 1)) * 2);
                 }
             } else {
-                List<Integer> list = StringUtil.getDigit(sem)
+                List<Integer> s = list
                         .stream()
                         .filter(i -> i >= 70 && i <= 200)
                         .collect(Collectors.toList());
-                if (!list.isEmpty()) {
-                    spouseEntity.setWeight(list.get(list.size() - 1));
+                if (!s.isEmpty()) {
+                    spouseEntity.setWeight(s.get(s.size() - 1));
                 }
             }
         }
