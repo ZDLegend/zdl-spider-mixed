@@ -171,9 +171,15 @@ public class ContentAnalysis {
             if (sem.contains("985") || sem.contains("某top")) {
                 spouseEntity.setIs985(true);
                 spouseEntity.setIs211(true);
+                if (spouseEntity.getEducation() == null) {
+                    spouseEntity.setEducation("本科");
+                }
             } else if (sem.contains("211")) {
                 spouseEntity.setIs985(false);
                 spouseEntity.setIs211(true);
+                if (spouseEntity.getEducation() == null) {
+                    spouseEntity.setEducation("本科");
+                }
             } else {
                 spouseEntity.setIs985(false);
                 spouseEntity.setIs211(false);
