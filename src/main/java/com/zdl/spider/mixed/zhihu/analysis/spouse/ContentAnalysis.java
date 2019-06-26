@@ -22,7 +22,7 @@ public class ContentAnalysis {
 
     public static void main(String[] args) {
         List<SpouseEntity> list = QuestionParser.getInstance()
-                .execute("275359100", 0, 20)
+                .execute("275359100", 0, 3)
                 .thenApply(z -> z.contents().stream().map(AnswerDto::toEntity).map(ContentAnalysis::getSpouse).collect(Collectors.toList())).join();
 
         System.out.println(list);
@@ -50,6 +50,8 @@ public class ContentAnalysis {
         //将回答内容按段落分开
         List<String> list = Stream.of(content.split("<p>"))
                 .map(s -> s.replace("</p>", ""))
+                .flatMap(s -> Stream.of(s.split("\n")))
+                .flatMap(s -> Stream.of(s.split("。")))
                 .filter(StringUtils::isNotBlank)
                 .distinct()
                 .collect(Collectors.toList());
@@ -106,7 +108,7 @@ public class ContentAnalysis {
             } else if (s2.isEmpty()) {
                 spouseEntity.setAge(LocalDate.now().getYear() - (s1.get(0) + 1900));
             } else {
-                spouseEntity.setAge(LocalDate.now().getYear() - s1.get(0));
+                spouseEntity.setAge(LocalDate.now().getYear() - s2.get(0));
             }
         }
     }
@@ -180,9 +182,6 @@ public class ContentAnalysis {
                 if (spouseEntity.getEducation() == null) {
                     spouseEntity.setEducation("本科");
                 }
-            } else {
-                spouseEntity.setIs985(false);
-                spouseEntity.setIs211(false);
             }
         }
     }

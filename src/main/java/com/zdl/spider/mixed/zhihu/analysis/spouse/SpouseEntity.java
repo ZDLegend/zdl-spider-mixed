@@ -34,9 +34,9 @@ public class SpouseEntity {
     //学历
     private String education;
 
-    private Boolean is211;
+    private Boolean is211 = null;
 
-    private Boolean is985;
+    private Boolean is985 = null;
 
     //回答内容
     private String content;
