@@ -2,9 +2,9 @@ package com.zdl.spider.mixed.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * 文件操作工具类
@@ -48,6 +48,36 @@ public class FileUtil {
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
+    }
+
+    public static InputStream readClassPathResource(String path) throws IOException {
+        ClassPathResource classPathResource = new ClassPathResource(path);
+        return classPathResource.getInputStream();
+    }
+
+    /**
+     * 读取文件字节数组
+     * */
+    public static byte[] readClassPathFileToBytes(String path) {
+        try (InputStream inputStream =  readClassPathResource(path);
+             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+            inputStream.transferTo(buffer);
+            return buffer.toByteArray();
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return new byte[0];
+    }
+
+    /**
+     * 读取文件内容
+     * */
+    public static String readClassPathFileToString(String path) {
+        byte[] dataBytes = readClassPathFileToBytes(path);
+        if (dataBytes != null) {
+            return new String(dataBytes);
+        }
+        return null;
     }
 
 }
