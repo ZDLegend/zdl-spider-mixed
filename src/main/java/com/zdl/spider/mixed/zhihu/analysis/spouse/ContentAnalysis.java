@@ -110,6 +110,11 @@ public class ContentAnalysis {
             } else {
                 spouseEntity.setAge(LocalDate.now().getYear() - s2.get(0));
             }
+        } else if (spouseEntity.getAge() == null && sem.contains("岁")) {
+            List<Integer> s = list.stream().filter(i -> i >= 18 && i <= 40).collect(Collectors.toList());
+            if(!s.isEmpty()) {
+                spouseEntity.setAge(s.get(0));
+            }
         }
     }
 
