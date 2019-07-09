@@ -112,7 +112,7 @@ public class ContentAnalysis {
             }
         } else if (spouseEntity.getAge() == null && sem.contains("岁")) {
             List<Integer> s = list.stream().filter(i -> i >= 18 && i <= 40).collect(Collectors.toList());
-            if(!s.isEmpty()) {
+            if (!s.isEmpty()) {
                 spouseEntity.setAge(s.get(0));
             }
         }
@@ -152,8 +152,18 @@ public class ContentAnalysis {
     }
 
     private static void analysisEarth(String sem, SpouseEntity spouseEntity) {
-        if (spouseEntity.getCity() == null) {
+        if (spouseEntity.getCity() == null || spouseEntity.getProvince() == null) {
+            PcParser.getPcMap().forEach((k, v) -> {
+                if (sem.contains(k)) {
+                    spouseEntity.setProvince(k);
+                }
 
+                v.forEach(s -> {
+                    if (sem.contains(s)) {
+                        spouseEntity.setCity(s);
+                    }
+                });
+            });
         }
     }
 
