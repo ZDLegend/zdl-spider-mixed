@@ -4,7 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 文件操作工具类
@@ -57,9 +60,9 @@ public class FileUtil {
 
     /**
      * 读取文件字节数组
-     * */
+     */
     public static byte[] readClassPathFileToBytes(String path) {
-        try (InputStream inputStream =  readClassPathResource(path);
+        try (InputStream inputStream = readClassPathResource(path);
              ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
             inputStream.transferTo(buffer);
             return buffer.toByteArray();
@@ -71,7 +74,7 @@ public class FileUtil {
 
     /**
      * 读取文件内容
-     * */
+     */
     public static String readClassPathFileToString(String path) {
         byte[] dataBytes = readClassPathFileToBytes(path);
         if (dataBytes != null) {
