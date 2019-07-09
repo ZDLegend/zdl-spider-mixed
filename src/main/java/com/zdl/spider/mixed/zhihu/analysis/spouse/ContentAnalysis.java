@@ -123,15 +123,17 @@ public class ContentAnalysis {
             List<Integer> s = list.stream()
                     .filter(i -> i >= 140 && i <= 199)
                     .collect(Collectors.toList());
-            if (!s.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/") || sem.contains("cm"))) {
+            if (!s.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/")
+                    || sem.contains("cm") || sem.contains("CM"))) {
                 spouseEntity.setHigh(list.get(0));
             }
         }
     }
 
     private static void analysisWeigh(String sem, SpouseEntity spouseEntity, List<Integer> list) {
-        if (spouseEntity.getWeight() == null && (sem.contains("体重") || sem.contains("kg") || sem.contains("g") || sem.contains("/"))) {
-            if (sem.contains("kg")) {
+        if (spouseEntity.getWeight() == null && (sem.contains("体重") || sem.contains("kg") || sem.contains("KG")
+                || sem.contains("g") || sem.contains("G") || sem.contains("/"))) {
+            if (sem.contains("kg") || sem.contains("KG")) {
                 List<Integer> s = list
                         .stream()
                         .filter(i -> i >= 35 && i <= 100)
