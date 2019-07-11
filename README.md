@@ -14,6 +14,8 @@
 * 知乎restful api组合调用(com.zdl.spider.mixed.zhihu.strategy),调用demo可查看类的主函数
   * 知乎回答内容中的图片获取(ImageStrategy.java)
   * 知乎回答内容中的视频获取(VideoStrategy.java)
+  
+* 知乎择偶标准解析(analysis.spouse)(开发中)
 
 ### 123306 API (com.zdl.spider.mixed.railway)
 * 当前只有一个查看余票功能，调用方式可查看主函数，启动后会不断去查看余票量，并在有票的时候跳出对话框提示
