@@ -41,6 +41,15 @@ public class SpouseEntity {
     //回答内容
     private String content;
 
+    //有无照片
+    private Boolean hasPic;
+
+    //自身条件
+    private String self;
+
+    //要求
+    private String demand;
+
     public String getId() {
         return id;
     }
@@ -135,5 +144,29 @@ public class SpouseEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Boolean getHasPic() {
+        return hasPic;
+    }
+
+    public void setHasPic(Boolean hasPic) {
+        this.hasPic = hasPic;
+    }
+
+    public String getDemand() {
+        return demand;
+    }
+
+    public void setDemand(String demand) {
+        this.demand = demand;
+    }
+
+    public String getSelf() {
+        return self;
+    }
+
+    public void setSelf(String self) {
+        this.self = self;
     }
 }
