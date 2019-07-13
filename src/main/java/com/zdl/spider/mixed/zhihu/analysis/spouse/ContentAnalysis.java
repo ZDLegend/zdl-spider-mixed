@@ -1,5 +1,6 @@
 package com.zdl.spider.mixed.zhihu.analysis.spouse;
 
+import com.zdl.spider.mixed.utils.JsoupUtil;
 import com.zdl.spider.mixed.utils.StringUtil;
 import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.dto.AuthorDto;
@@ -46,6 +47,9 @@ public class ContentAnalysis {
     }
 
     public static SpouseEntity analysis(String content, SpouseEntity spouseEntity) {
+
+        List<String> image = JsoupUtil.getImageAddrByHtml(content);
+        spouseEntity.setHasPic(image.size() > 0);
 
         //将回答内容按段落分开
         List<String> list = Stream.of(content.split("<p>"))
