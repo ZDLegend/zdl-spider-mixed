@@ -23,7 +23,7 @@ public class ContentAnalysis {
 
     public static void main(String[] args) {
         List<SpouseEntity> list = QuestionParser.getInstance()
-                .execute("275359100", 0, 3)
+                .execute("275359100", 0, 1)
                 .thenApply(z -> z.contents().stream().map(AnswerDto::toEntity).map(ContentAnalysis::getSpouse).collect(Collectors.toList())).join();
 
         System.out.println(list);
@@ -129,7 +129,7 @@ public class ContentAnalysis {
                     .collect(Collectors.toList());
             if (!s.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/")
                     || sem.contains("cm") || sem.contains("CM"))) {
-                spouseEntity.setHigh(list.get(0));
+                spouseEntity.setHigh(s.get(0));
             }
         }
     }
@@ -148,10 +148,14 @@ public class ContentAnalysis {
             } else {
                 List<Integer> s = list
                         .stream()
-                        .filter(i -> i >= 70 && i <= 200)
+                        .filter(i -> i >= 40 && i <= 200)
                         .collect(Collectors.toList());
                 if (!s.isEmpty()) {
-                    spouseEntity.setWeight(s.get(s.size() - 1));
+                    int w = s.get(s.size() - 1);
+                    if(w < 60) {
+                        w = w * 2;
+                    }
+                    spouseEntity.setWeight(w);
                 }
             }
         }
