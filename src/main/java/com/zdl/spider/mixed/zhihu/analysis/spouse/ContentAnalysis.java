@@ -23,7 +23,7 @@ public class ContentAnalysis {
 
     public static void main(String[] args) {
         List<SpouseEntity> list = QuestionParser.getInstance()
-                .execute("275359100", 0, 1)
+                .execute("275359100", 0, 7)
                 .thenApply(z -> z.contents().stream().map(AnswerDto::toEntity).map(ContentAnalysis::getSpouse).collect(Collectors.toList())).join();
 
         System.out.println(list);
@@ -166,6 +166,10 @@ public class ContentAnalysis {
             PcParser.getPcMap().forEach((k, v) -> {
                 if (sem.contains(k)) {
                     spouseEntity.setProvince(k);
+                } else if (sem.contains("魔都")) {
+                    spouseEntity.setProvince("上海");
+                } else if (sem.contains("帝都")) {
+                    spouseEntity.setProvince("北京");
                 }
 
                 v.forEach(s -> {
