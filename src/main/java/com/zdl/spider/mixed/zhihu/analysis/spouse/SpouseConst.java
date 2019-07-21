@@ -11,7 +11,7 @@ public class SpouseConst {
     public static Map<String, String> questionMap = new ConcurrentHashMap<>();
 
     static {
-        getAllQuestionBySpouse();
+        getAllQuestionBySpouse().join();
 
         //无用问题过滤
         questionMap.forEach((k, v) -> {
@@ -39,6 +39,10 @@ public class SpouseConst {
         questionMap.put("330598228", "有什么高端靠谱的相亲途径?");
     }
 
+
+    /**
+     * 通过搜索方式获取择偶标准相关的各个问题(从100个答案中过滤)
+     */
     private static CompletableFuture<Void> getAllQuestionBySpouse() {
         return SearchParser.getInstance()
                 .pagingParser("择偶标准是怎样的", 100, parser -> parser.contents().forEach(answerDto -> {
