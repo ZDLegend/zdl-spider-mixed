@@ -2,16 +2,41 @@ package com.zdl.spider.mixed.zhihu.analysis.spouse;
 
 import com.zdl.spider.mixed.zhihu.parser.SearchParser;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class SpouseConst {
 
-    public static Map<String, String> questionMap = new HashMap<>();
+    public static Map<String, String> questionMap = new ConcurrentHashMap<>();
 
     static {
         getAllQuestionBySpouse();
+
+        //无用问题过滤
+        questionMap.forEach((k, v) -> {
+            if(v.contains("如何看待")) {
+                questionMap.remove(k);
+            }
+
+            if(v.contains("基友们")) {
+                questionMap.remove(k);
+            }
+
+            if(v.contains("为什么知乎上")) {
+                questionMap.remove(k);
+            }
+
+            if(v.contains("如何根据")) {
+                questionMap.remove(k);
+            }
+
+            if(v.contains("这样的择偶标准")) {
+                questionMap.remove(k);
+            }
+        });
+
+        questionMap.put("330598228", "有什么高端靠谱的相亲途径?");
     }
 
     private static CompletableFuture<Void> getAllQuestionBySpouse() {
