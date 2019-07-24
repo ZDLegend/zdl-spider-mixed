@@ -35,21 +35,21 @@ public class PcParser {
             List<String> list = json.getJSONArray(key)
                     .stream()
                     .map(String::valueOf)
-                    .map(s1 -> s1.replace("市","").replace("区",""))
+                    .map(s1 -> s1.replace("市", "").replace("区", ""))
                     .collect(Collectors.toList());
             String ss = key.replace("省", "")
-                    .replace("市","")
-                    .replace("自治区","");
+                    .replace("市", "")
+                    .replace("自治区", "");
 
-            if(ss.contains("新疆")) {
+            if (ss.contains("新疆")) {
                 ss = "新疆";
-            } else if(ss.contains("西藏")) {
+            } else if (ss.contains("西藏")) {
                 ss = "西藏";
-            } else if(ss.contains("广西")) {
+            } else if (ss.contains("广西")) {
                 ss = "广西";
-            } else if(ss.contains("内蒙古")) {
+            } else if (ss.contains("内蒙古")) {
                 ss = "内蒙古";
-            } else if(ss.contains("宁夏")) {
+            } else if (ss.contains("宁夏")) {
                 ss = "宁夏";
             }
 

@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -113,5 +115,11 @@ public final class HttpUtil {
                     logger.error(e.getMessage(), e);
                     return null;
                 });
+    }
+
+    private static HttpClient clientBuildPoxy(String proxyAddr, int port) {
+        return HttpClient.newBuilder()
+                .proxy(ProxySelector.of(new InetSocketAddress(proxyAddr, port)))
+                .build();
     }
 }

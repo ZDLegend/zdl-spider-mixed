@@ -1,5 +1,6 @@
 package com.zdl.spider.mixed.zhihu.analysis.spouse;
 
+import com.zdl.spider.mixed.utils.JsoupUtil;
 import com.zdl.spider.mixed.utils.StringUtil;
 import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.dto.AuthorDto;
@@ -22,7 +23,7 @@ public class ContentAnalysis {
 
     public static void main(String[] args) {
         List<SpouseEntity> list = QuestionParser.getInstance()
-                .execute("275359100", 0, 3)
+                .execute("275359100", 0, 7)
                 .thenApply(z -> z.contents().stream().map(AnswerDto::toEntity).map(ContentAnalysis::getSpouse).collect(Collectors.toList())).join();
 
         System.out.println(list);
@@ -46,6 +47,9 @@ public class ContentAnalysis {
     }
 
     public static SpouseEntity analysis(String content, SpouseEntity spouseEntity) {
+
+        List<String> image = JsoupUtil.getImageAddrByHtml(content);
+        spouseEntity.setHasPic(image.size() > 0);
 
         //将回答内容按段落分开
         List<String> list = Stream.of(content.split("<p>"))
@@ -112,7 +116,7 @@ public class ContentAnalysis {
             }
         } else if (spouseEntity.getAge() == null && sem.contains("岁")) {
             List<Integer> s = list.stream().filter(i -> i >= 18 && i <= 40).collect(Collectors.toList());
-            if(!s.isEmpty()) {
+            if (!s.isEmpty()) {
                 spouseEntity.setAge(s.get(0));
             }
         }
@@ -123,15 +127,17 @@ public class ContentAnalysis {
             List<Integer> s = list.stream()
                     .filter(i -> i >= 140 && i <= 199)
                     .collect(Collectors.toList());
-            if (!s.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/") || sem.contains("cm"))) {
-                spouseEntity.setHigh(list.get(0));
+            if (!s.isEmpty() && (sem.contains("身高") || sem.contains("高") || sem.contains("/")
+                    || sem.contains("cm") || sem.contains("CM"))) {
+                spouseEntity.setHigh(s.get(0));
             }
         }
     }
 
     private static void analysisWeigh(String sem, SpouseEntity spouseEntity, List<Integer> list) {
-        if (spouseEntity.getWeight() == null && (sem.contains("体重") || sem.contains("kg") || sem.contains("g") || sem.contains("/"))) {
-            if (sem.contains("kg")) {
+        if (spouseEntity.getWeight() == null && (sem.contains("体重") || sem.contains("kg") || sem.contains("KG")
+                || sem.contains("g") || sem.contains("G") || sem.contains("/"))) {
+            if (sem.contains("kg") || sem.contains("KG")) {
                 List<Integer> s = list
                         .stream()
                         .filter(i -> i >= 35 && i <= 100)
@@ -142,18 +148,36 @@ public class ContentAnalysis {
             } else {
                 List<Integer> s = list
                         .stream()
-                        .filter(i -> i >= 70 && i <= 200)
+                        .filter(i -> i >= 40 && i <= 200)
                         .collect(Collectors.toList());
                 if (!s.isEmpty()) {
-                    spouseEntity.setWeight(s.get(s.size() - 1));
+                    int w = s.get(s.size() - 1);
+                    if(w < 60) {
+                        w = w * 2;
+                    }
+                    spouseEntity.setWeight(w);
                 }
             }
         }
     }
 
     private static void analysisEarth(String sem, SpouseEntity spouseEntity) {
-        if (spouseEntity.getCity() == null) {
+        if (spouseEntity.getCity() == null || spouseEntity.getProvince() == null) {
+            PcParser.getPcMap().forEach((k, v) -> {
+                if (sem.contains(k)) {
+                    spouseEntity.setProvince(k);
+                } else if (sem.contains("魔都")) {
+                    spouseEntity.setProvince("上海");
+                } else if (sem.contains("帝都")) {
+                    spouseEntity.setProvince("北京");
+                }
 
+                v.forEach(s -> {
+                    if (sem.contains(s)) {
+                        spouseEntity.setCity(s);
+                    }
+                });
+            });
         }
     }
 
