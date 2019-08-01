@@ -23,7 +23,7 @@ public class ContentAnalysis {
 
     public static void main(String[] args) {
         List<SpouseEntity> list = QuestionParser.getInstance()
-                .execute("275359100", 0, 7)
+                .execute("275359100", 0, 10)
                 .thenApply(z -> z.contents().stream().map(AnswerDto::toEntity).map(ContentAnalysis::getSpouse).collect(Collectors.toList())).join();
 
         System.out.println(list);
@@ -187,14 +187,16 @@ public class ContentAnalysis {
                 spouseEntity.setEducation("本科");
             } else if (sem.contains("大专")) {
                 spouseEntity.setEducation("大专");
+                spouseEntity.setIs985(false);
+                spouseEntity.setIs211(false);
             } else if (sem.contains("中专")) {
                 spouseEntity.setEducation("中专");
+                spouseEntity.setIs985(false);
+                spouseEntity.setIs211(false);
             } else if (sem.contains("硕") || sem.contains("研究生") || sem.contains("读研")) {
                 spouseEntity.setEducation("硕士");
             } else if (sem.contains("博士") || sem.contains("硕博") || sem.contains("读博")) {
                 spouseEntity.setEducation("博士");
-            } else if (sem.contains("高中")) {
-                spouseEntity.setEducation("高中或高中以下");
             }
         }
 
