@@ -29,6 +29,9 @@ public class ContentAnalysis {
         System.out.println(list);
     }
 
+    /**
+     * 通过回答解析条件类
+     */
     public static SpouseEntity getSpouse(AnswerEntity answerEntity) {
         SpouseEntity spouseEntity = new SpouseEntity();
         spouseEntity.setId(answerEntity.getQuestionId() + "_" + answerEntity.getId());
@@ -46,6 +49,11 @@ public class ContentAnalysis {
         return spouseEntity;
     }
 
+    /**
+     * 判断是否有效
+     * @param spouseEntity
+     * @return
+     */
     public boolean isValid(SpouseEntity spouseEntity) {
         return spouseEntity.getAge() != null
                 && spouseEntity.getGender() != null
@@ -53,6 +61,12 @@ public class ContentAnalysis {
                 && spouseEntity.getWeight() != null;
     }
 
+    /**
+     * 回答内容解析
+     * @param content
+     * @param spouseEntity
+     * @return
+     */
     public static SpouseEntity analysis(String content, SpouseEntity spouseEntity) {
 
         List<String> image = JsoupUtil.getImageAddrByHtml(content);
