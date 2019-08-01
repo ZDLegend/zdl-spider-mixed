@@ -46,6 +46,13 @@ public class ContentAnalysis {
         return spouseEntity;
     }
 
+    public boolean isValid(SpouseEntity spouseEntity) {
+        return spouseEntity.getAge() != null
+                && spouseEntity.getGender() != null
+                && spouseEntity.getHigh() != null
+                && spouseEntity.getWeight() != null;
+    }
+
     public static SpouseEntity analysis(String content, SpouseEntity spouseEntity) {
 
         List<String> image = JsoupUtil.getImageAddrByHtml(content);
