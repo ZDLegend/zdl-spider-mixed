@@ -15,13 +15,28 @@ import java.util.stream.Collectors;
  */
 public class PcParser {
 
+    /**
+     * 全国省市map
+     */
     private static Map<String, List<String>> pcMap = new HashMap<>();
+
+    /**
+     * 直辖市及香港澳门列表
+     */
+    private static List<String> specialCities = new ArrayList<>();
 
     static {
         getFile();
         pcMap.put("香港", new ArrayList<>());
         pcMap.put("澳门", new ArrayList<>());
         pcMap.put("台湾", new ArrayList<>());
+
+        specialCities.add("北京");
+        specialCities.add("天津");
+        specialCities.add("上海");
+        specialCities.add("重庆");
+        specialCities.add("香港");
+        specialCities.add("澳门");
     }
 
     public static void main(String[] args) {
@@ -59,5 +74,9 @@ public class PcParser {
 
     public static Map<String, List<String>> getPcMap() {
         return pcMap;
+    }
+
+    public static List<String> getSpecialCities() {
+        return specialCities;
     }
 }
