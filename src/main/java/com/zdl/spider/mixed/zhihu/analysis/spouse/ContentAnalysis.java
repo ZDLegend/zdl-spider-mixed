@@ -51,6 +51,7 @@ public class ContentAnalysis {
 
     /**
      * 判断是否有效
+     *
      * @param spouseEntity
      * @return
      */
@@ -63,6 +64,7 @@ public class ContentAnalysis {
 
     /**
      * 回答内容解析
+     *
      * @param content
      * @param spouseEntity
      * @return
@@ -173,7 +175,7 @@ public class ContentAnalysis {
                         .collect(Collectors.toList());
                 if (!s.isEmpty()) {
                     int w = s.get(s.size() - 1);
-                    if(w < 60) {
+                    if (w < 60) {
                         w = w * 2;
                     }
                     spouseEntity.setWeight(w);

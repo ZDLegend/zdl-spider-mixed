@@ -15,23 +15,23 @@ public class SpouseConst {
 
         //无用问题过滤
         questionMap.forEach((k, v) -> {
-            if(v.contains("如何看待")) {
+            if (v.contains("如何看待")) {
                 questionMap.remove(k);
             }
 
-            if(v.contains("基友们")) {
+            if (v.contains("基友们")) {
                 questionMap.remove(k);
             }
 
-            if(v.contains("为什么知乎上")) {
+            if (v.contains("为什么知乎上")) {
                 questionMap.remove(k);
             }
 
-            if(v.contains("如何根据")) {
+            if (v.contains("如何根据")) {
                 questionMap.remove(k);
             }
 
-            if(v.contains("这样的择偶标准")) {
+            if (v.contains("这样的择偶标准")) {
                 questionMap.remove(k);
             }
         });
@@ -46,7 +46,7 @@ public class SpouseConst {
     private static CompletableFuture<Void> getAllQuestionBySpouse() {
         return SearchParser.getInstance()
                 .pagingParser("择偶标准是怎样的", 100, parser -> parser.contents().forEach(answerDto -> {
-                    if(!questionMap.containsKey(answerDto.getQuestion().getId())) {
+                    if (!questionMap.containsKey(answerDto.getQuestion().getId())) {
                         questionMap.put(answerDto.getQuestion().getId(), answerDto.getQuestion().getName());
                     }
                 }));

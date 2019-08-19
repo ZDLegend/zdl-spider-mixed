@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * Created by ZDLegend on 2019/8/13 20:19
  */
 @Service
-public class SpouseService  extends AbstractService<SpouseEntity> {
+public class SpouseService extends AbstractService<SpouseEntity> {
 
     @Autowired
     private SpouseDao spouseDao;
