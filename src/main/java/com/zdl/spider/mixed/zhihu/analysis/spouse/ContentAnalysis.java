@@ -200,6 +200,10 @@ public class ContentAnalysis {
                         spouseEntity.setCity(s);
                     }
                 });
+
+                if (PcParser.getSpecialCities().contains(spouseEntity.getProvince())) {
+                    spouseEntity.setCity(spouseEntity.getProvince());
+                }
             });
         }
     }
