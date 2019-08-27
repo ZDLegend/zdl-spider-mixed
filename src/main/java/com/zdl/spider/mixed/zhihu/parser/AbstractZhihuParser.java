@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractZhihuParser.class);
-    private static final int MAX_PAGE_SIZE = 10;
+    private static final int MAX_PAGE_SIZE = 20;
 
     PageDto pageDto;
     List<T> contents;
