@@ -56,7 +56,7 @@ public class ContentAnalysis {
      * @param spouseEntity
      * @return
      */
-    public boolean isValid(SpouseEntity spouseEntity) {
+    public static boolean isValid(SpouseEntity spouseEntity) {
         return spouseEntity.getAge() != null
                 && spouseEntity.getGender() != null
                 && spouseEntity.getHigh() != null

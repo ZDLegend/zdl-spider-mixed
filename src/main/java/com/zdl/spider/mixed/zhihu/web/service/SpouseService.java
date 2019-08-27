@@ -7,6 +7,7 @@ import com.zdl.spider.mixed.zhihu.analysis.spouse.SpouseEntity;
 import com.zdl.spider.mixed.zhihu.dto.AnswerDto;
 import com.zdl.spider.mixed.zhihu.parser.QuestionParser;
 import com.zdl.spider.mixed.zhihu.web.dao.SpouseDao;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,9 +34,15 @@ public class SpouseService extends AbstractService<SpouseEntity> {
                                     .map(AnswerDto::toEntity)
                                     .map(ContentAnalysis::getSpouse)
                                     .peek(spouseEntity -> {
-                                        spouseEntity.setCity(pair.getRight());
-                                        spouseEntity.setProvince(pair.getLeft());
+                                        if(StringUtils.isNotBlank(pair.getLeft())) {
+                                            spouseEntity.setProvince(pair.getLeft());
+                                        }
+
+                                        if(StringUtils.isNotBlank(pair.getRight())) {
+                                            spouseEntity.setCity(pair.getRight());
+                                        }
                                     })
+                                    .filter(ContentAnalysis::isValid)
                                     .forEach(this::insert)
                     )
                     .join();
