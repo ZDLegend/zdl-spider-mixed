@@ -8,6 +8,7 @@ import com.zdl.spider.mixed.zhihu.parser.QuestionParser;
 import com.zdl.spider.mixed.zhihu.parser.ZhihuApi;
 import com.zdl.spider.mixed.zhihu.web.entity.AnswerEntity;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -186,25 +187,10 @@ public class ContentAnalysis {
 
     private static void analysisEarth(String sem, SpouseEntity spouseEntity) {
         if (spouseEntity.getCity() == null || spouseEntity.getProvince() == null) {
-            PcParser.getPcMap().forEach((k, v) -> {
-                if (sem.contains(k)) {
-                    spouseEntity.setProvince(k);
-                } else if (sem.contains("魔都")) {
-                    spouseEntity.setProvince("上海");
-                } else if (sem.contains("帝都")) {
-                    spouseEntity.setProvince("北京");
-                }
+            Pair<String, String> pair = PcParser.getEarth(sem);
+            spouseEntity.setCity(pair.getRight());
+            spouseEntity.setProvince(pair.getLeft());
 
-                v.forEach(s -> {
-                    if (sem.contains(s)) {
-                        spouseEntity.setCity(s);
-                    }
-                });
-
-                if (PcParser.getSpecialCities().contains(spouseEntity.getProvince())) {
-                    spouseEntity.setCity(spouseEntity.getProvince());
-                }
-            });
         }
     }
 

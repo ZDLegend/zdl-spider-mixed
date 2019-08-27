@@ -3,6 +3,7 @@ package com.zdl.spider.mixed.zhihu.analysis.spouse;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zdl.spider.mixed.utils.FileUtil;
+import org.apache.commons.lang3.tuple.MutablePair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +71,30 @@ public class PcParser {
 
             pcMap.put(ss, list);
         });
+    }
+
+    public static MutablePair<String, String> getEarth(String sem) {
+        MutablePair<String, String> pair = new MutablePair<>();
+        PcParser.getPcMap().forEach((k, v) -> {
+            if (sem.contains(k)) {
+                pair.setLeft(k);
+            } else if (sem.contains("魔都")) {
+                pair.setLeft("上海");
+            } else if (sem.contains("帝都")) {
+                pair.setLeft("北京");
+            }
+
+            v.forEach(s -> {
+                if (sem.contains(s)) {
+                    pair.setRight(s);
+                }
+            });
+
+            if (PcParser.getSpecialCities().contains(pair.getLeft())) {
+                pair.setRight(pair.getLeft());
+            }
+        });
+        return pair;
     }
 
     public static Map<String, List<String>> getPcMap() {
