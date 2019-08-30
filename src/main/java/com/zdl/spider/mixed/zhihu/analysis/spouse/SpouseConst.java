@@ -22,28 +22,13 @@ public class SpouseConst {
                 .whenComplete((aVoid, throwable) -> {
                     //无用问题过滤
                     questionMap.forEach((k, v) -> {
-                        if (v.contains("如何看待")) {
-                            questionMap.remove(k);
-                        }
-
-                        if (v.contains("基友们")) {
-                            questionMap.remove(k);
-                        }
-
-                        if (v.contains("为什么知乎上")) {
-                            questionMap.remove(k);
-                        }
-
-                        if (v.contains("如何根据")) {
-                            questionMap.remove(k);
-                        }
-
-                        if (v.contains("这样的择偶标准")) {
+                        if(!v.contains("的你")) {
                             questionMap.remove(k);
                         }
                     });
 
                     questionMap.put("330598228", "有什么高端靠谱的相亲途径?");
+                    questionMap.put("275359100", "你的择偶标准是怎样的");
                 });
     }
 
