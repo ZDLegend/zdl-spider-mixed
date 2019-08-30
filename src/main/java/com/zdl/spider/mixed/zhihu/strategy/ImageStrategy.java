@@ -19,9 +19,10 @@ public class ImageStrategy implements AnswerStrategy<Image> {
         ImageStrategy.getInstance().getBySearch("一个人健身前和健身后有什么区别",
                 1,
                 5,
-                image -> image.directSave("C:\\Users\\zdlegend\\Pictures")
+                image -> image.directSave("/Users/zhangminghao/CODE/cc")
         ).runAfterBoth(ImageStrategy.getInstance().getByAuthor("he-xiao-lou-42", 20,
-                image -> image.saveByAuthorThenQuestion("C:\\Users\\zdlegend\\Pictures")), () -> System.out.println("finished"));
+                image -> image.saveByAuthorThenQuestion("/Users/zhangminghao/CODE/cc")),
+                () -> System.out.println("finished")).join();
     }
 
     private ImageStrategy() {
