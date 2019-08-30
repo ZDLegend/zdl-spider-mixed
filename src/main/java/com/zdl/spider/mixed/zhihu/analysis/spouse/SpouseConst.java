@@ -13,11 +13,11 @@ public class SpouseConst {
     public static Map<String, String> questionMap = new ConcurrentHashMap<>();
 
     /**
-     * 通过搜索方式获取择偶标准相关的各个问题(从100个答案中过滤)
+     * 通过搜索方式获取择偶标准相关的各个问题(使用全量搜索)
      */
     public static CompletableFuture<Void> getAllQuestionBySpouse() {
         return SearchParser.getInstance()
-                .pagingParser("择偶标准是怎样的", 50, SpouseConst::cc)
+                .pagingParserSimple("择偶标准是怎样的", -1, SpouseConst::cc)
                 .whenComplete((aVoid, throwable) -> {
                     //无用问题过滤
                     questionMap.forEach((k, v) -> {
