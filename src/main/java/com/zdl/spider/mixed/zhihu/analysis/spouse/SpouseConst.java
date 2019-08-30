@@ -16,7 +16,7 @@ public class SpouseConst {
     /**
      * 通过搜索方式获取择偶标准相关的各个问题(从100个答案中过滤)
      */
-    private static CompletableFuture<Void> getAllQuestionBySpouse() {
+    public static CompletableFuture<Void> getAllQuestionBySpouse() {
         return SearchParser.getInstance()
                 .pagingParser("择偶标准是怎样的", 50, SpouseConst::cc)
                 .whenComplete((aVoid, throwable) -> {

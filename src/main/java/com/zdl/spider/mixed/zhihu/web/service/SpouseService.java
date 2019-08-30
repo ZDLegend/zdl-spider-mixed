@@ -26,6 +26,7 @@ public class SpouseService extends AbstractService<SpouseEntity> {
     private SpouseDao spouseDao;
 
     public void startAnalysis() {
+        SpouseConst.getAllQuestionBySpouse().join();
         SpouseConst.questionMap.forEach((k, v) -> {
             Pair<String, String> pair = PcParser.getEarth(v);
             QuestionParser.getInstance()
