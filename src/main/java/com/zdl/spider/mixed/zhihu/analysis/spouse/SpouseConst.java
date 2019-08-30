@@ -12,7 +12,6 @@ public class SpouseConst {
 
     public static Map<String, String> questionMap = new ConcurrentHashMap<>();
 
-
     /**
      * 通过搜索方式获取择偶标准相关的各个问题(从100个答案中过滤)
      */

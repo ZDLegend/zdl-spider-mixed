@@ -81,11 +81,11 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
         if (deep <= MAX_PAGE_SIZE && deep > 0) {
             return execute(q, start, deep)
                     .whenComplete((parser, throwable) -> executeAfter(parser, consumer, throwable))
-                    .thenAccept(parser -> logger.info("Execute finish!"));
+                    .thenAccept(parser -> logger.info("paper ({}, {}) searching execute finish!", start, deep));
         } else if (deep < 0) {
             //执行全量
             var url = url(q, start, MAX_PAGE_SIZE);
-            return pagingParser(url, consumer).thenAccept(parser -> logger.info("Execute finish!"));
+            return pagingParser(url, consumer).thenAccept(parser -> logger.info("paper ({}, {}) searching execute finish!", start, deep));
         } else {
             //分页执行
             return execute(q, start, MAX_PAGE_SIZE)
@@ -99,7 +99,7 @@ public abstract class AbstractZhihuParser<T> implements ZhihuParser<T> {
                         } else {
                             return pagingParser(q, start + MAX_PAGE_SIZE, surplus, consumer);
                         }
-                    }).thenAccept(parser -> logger.info("Execute finish!"));
+                    }).thenAccept(parser -> logger.info("paper ({}, {}) searching execute finish!", start, deep));
         }
     }
 
