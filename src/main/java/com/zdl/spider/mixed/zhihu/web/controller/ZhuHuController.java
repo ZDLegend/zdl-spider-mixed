@@ -3,10 +3,7 @@ package com.zdl.spider.mixed.zhihu.web.controller;
 import com.zdl.spider.mixed.zhihu.web.service.AnswerService;
 import com.zdl.spider.mixed.zhihu.web.service.SpouseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by ZDLegend on 2019/5/29 14:53
@@ -26,7 +23,7 @@ public class ZhuHuController {
         answerService.saveAllAnswerByQuestion(questionId);
     }
 
-    @PostMapping("question/spouse")
+    @GetMapping("question/spouse")
     public void analysisSpouse() {
         spouseService.startAnalysis();
     }
