@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * Created by ZDLegend on 2019/8/13 20:19
  */
@@ -35,11 +32,11 @@ public class SpouseService extends AbstractService<SpouseEntity> {
                                     .map(AnswerDto::toEntity)
                                     .map(ContentAnalysis::getSpouse)
                                     .peek(spouseEntity -> {
-                                        if(StringUtils.isNotBlank(pair.getLeft())) {
+                                        if (StringUtils.isNotBlank(pair.getLeft())) {
                                             spouseEntity.setProvince(pair.getLeft());
                                         }
 
-                                        if(StringUtils.isNotBlank(pair.getRight())) {
+                                        if (StringUtils.isNotBlank(pair.getRight())) {
                                             spouseEntity.setCity(pair.getRight());
                                         }
                                     })

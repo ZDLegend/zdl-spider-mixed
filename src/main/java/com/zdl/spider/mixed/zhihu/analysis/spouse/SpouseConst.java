@@ -21,7 +21,7 @@ public class SpouseConst {
                 .whenComplete((aVoid, throwable) -> {
                     //无用问题过滤
                     questionMap.forEach((k, v) -> {
-                        if(!v.contains("的你")) {
+                        if (!v.contains("的你")) {
                             questionMap.remove(k);
                         }
                     });
