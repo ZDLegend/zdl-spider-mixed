@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * Created by ZDLegend on 2019/8/13 20:19
  */
@@ -22,6 +24,7 @@ public class SpouseService extends AbstractService<SpouseEntity> {
     @Autowired
     private SpouseDao spouseDao;
 
+    @Transactional
     public void startAnalysis() {
         SpouseConst.getAllQuestionBySpouse().join();
         SpouseConst.questionMap.forEach((k, v) -> {
