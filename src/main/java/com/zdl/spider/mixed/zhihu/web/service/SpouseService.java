@@ -12,6 +12,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.transaction.Transactional;
 
@@ -24,31 +25,38 @@ public class SpouseService extends AbstractService<SpouseEntity> {
     @Autowired
     private SpouseDao spouseDao;
 
-    @Transactional
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+
     public void startAnalysis() {
-        SpouseConst.getAllQuestionBySpouse().join();
-        SpouseConst.questionMap.forEach((k, v) -> {
-            Pair<String, String> pair = PcParser.getEarth(v);
-            QuestionParser.getInstance()
-                    .pagingParser(k, -1,
-                            z -> z.contents().stream()
-                                    .map(AnswerDto::toEntity)
-                                    .map(ContentAnalysis::getSpouse)
-                                    .peek(spouseEntity -> {
-                                        if (StringUtils.isNotBlank(pair.getLeft())) {
-                                            spouseEntity.setProvince(pair.getLeft());
-                                        }
+        transactionTemplate.execute(call -> {
+            SpouseConst.getAllQuestionBySpouse().whenComplete((vo, throwable) -> {
+                SpouseConst.questionMap.forEach((k, v) -> {
+                    Pair<String, String> pair = PcParser.getEarth(v);
+                    QuestionParser.getInstance()
+                            .pagingParser(k, -1,
+                                    z -> z.contents().stream()
+                                            .map(AnswerDto::toEntity)
+                                            .map(ContentAnalysis::getSpouse)
+                                            .peek(spouseEntity -> {
+                                                if (StringUtils.isNotBlank(pair.getLeft())) {
+                                                    spouseEntity.setProvince(pair.getLeft());
+                                                }
 
-                                        if (StringUtils.isNotBlank(pair.getRight())) {
-                                            spouseEntity.setCity(pair.getRight());
-                                        }
-                                    })
-                                    .filter(ContentAnalysis::isValid)
-                                    .forEach(this::insert)
-                    )
-                    .join();
+                                                if (StringUtils.isNotBlank(pair.getRight())) {
+                                                    spouseEntity.setCity(pair.getRight());
+                                                }
+                                            })
+                                            .filter(ContentAnalysis::isValid)
+                                            .forEach(this::insert)
+                            )
+                            .join();
+                });
+            });
 
+            return true;
         });
+
     }
 
     @Override
