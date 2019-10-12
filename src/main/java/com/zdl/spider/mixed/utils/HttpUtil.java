@@ -19,6 +19,7 @@ import java.util.function.Function;
 
 import static com.zdl.spider.mixed.utils.HttpConst.AGENT;
 import static com.zdl.spider.mixed.utils.HttpConst.AGENT_CONTENT;
+import static com.zdl.spider.mixed.utils.PropertiesUtil.RESOURCE;
 
 /**
  * http相关工具类
@@ -47,7 +48,7 @@ public final class HttpUtil {
         logger.debug("save url:{} to {}", url, path);
         FileUtil.createFile(path);
         var r = HttpRequest.newBuilder(URI.create(url)).build();
-        return HttpClient.newHttpClient()
+        return clientBuild()
                 .sendAsync(r, HttpResponse.BodyHandlers.ofInputStream())
                 .thenApply(HttpResponse::body)
                 .thenAccept(is -> {
@@ -87,7 +88,7 @@ public final class HttpUtil {
                 .POST(HttpRequest.BodyPublishers.ofString(data))
                 .build();
 
-        return HttpClient.newHttpClient()
+        return clientBuild()
                 .sendAsync(r, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenApply(JSONObject::parseObject)
@@ -107,7 +108,7 @@ public final class HttpUtil {
                 .headers(headers)
                 .build();
 
-        return HttpClient.newHttpClient()
+        return clientBuild()
                 .sendAsync(r, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenApply(apply)
@@ -115,6 +116,15 @@ public final class HttpUtil {
                     logger.error(e.getMessage(), e);
                     return null;
                 });
+    }
+
+    private static HttpClient clientBuild() {
+        if (PropertiesUtil.isHttpPoxy()) {
+            return clientBuildPoxy(RESOURCE.getString("http.poxy.addr"),
+                    Integer.parseInt(RESOURCE.getString("http.poxy.port")));
+        } else {
+            return HttpClient.newHttpClient();
+        }
     }
 
     private static HttpClient clientBuildPoxy(String proxyAddr, int port) {
