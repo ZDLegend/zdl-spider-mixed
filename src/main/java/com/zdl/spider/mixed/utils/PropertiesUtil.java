@@ -13,11 +13,14 @@ public class PropertiesUtil {
 
     public static final ResourceBundle RESOURCE = ResourceBundle.getBundle("application");
 
+    public static final String HTTP_POXY_ADDR = "http.poxy.addr";
+    public static final String HTTP_POXY_PORT = "http.poxy.port";
+
     /**
      * 是否配置HTTP代理
      */
     public static boolean isHttpPoxy() {
-        return StringUtils.isNotBlank(RESOURCE.getString("http.poxy.addr"))
-                && StringUtils.isNotBlank(RESOURCE.getString("http.poxy.port"));
+        return StringUtils.isNotBlank(RESOURCE.getString(HTTP_POXY_ADDR))
+                && StringUtils.isNotBlank(RESOURCE.getString(HTTP_POXY_PORT));
     }
 }

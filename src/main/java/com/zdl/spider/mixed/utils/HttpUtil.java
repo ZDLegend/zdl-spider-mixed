@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 import static com.zdl.spider.mixed.utils.HttpConst.AGENT;
 import static com.zdl.spider.mixed.utils.HttpConst.AGENT_CONTENT;
-import static com.zdl.spider.mixed.utils.PropertiesUtil.RESOURCE;
+import static com.zdl.spider.mixed.utils.PropertiesUtil.*;
 
 /**
  * http相关工具类
@@ -120,8 +120,8 @@ public final class HttpUtil {
 
     private static HttpClient clientBuild() {
         if (PropertiesUtil.isHttpPoxy()) {
-            return clientBuildPoxy(RESOURCE.getString("http.poxy.addr"),
-                    Integer.parseInt(RESOURCE.getString("http.poxy.port")));
+            return clientBuildPoxy(RESOURCE.getString(HTTP_POXY_ADDR),
+                    Integer.parseInt(RESOURCE.getString(HTTP_POXY_PORT)));
         } else {
             return HttpClient.newHttpClient();
         }
