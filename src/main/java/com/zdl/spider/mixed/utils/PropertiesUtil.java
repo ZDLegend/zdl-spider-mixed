@@ -20,7 +20,7 @@ public class PropertiesUtil {
      * 是否配置HTTP代理
      */
     public static boolean isHttpPoxy() {
-        return StringUtils.isNotBlank(RESOURCE.getString(HTTP_POXY_ADDR))
-                && StringUtils.isNotBlank(RESOURCE.getString(HTTP_POXY_PORT));
+        return RESOURCE.containsKey(HTTP_POXY_ADDR)
+                && RESOURCE.containsKey(HTTP_POXY_PORT);
     }
 }
