@@ -9,18 +9,20 @@ import com.zdl.spider.mixed.zhihu.parser.QuestionParser;
 import com.zdl.spider.mixed.zhihu.web.dao.SpouseDao;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
-
-import javax.transaction.Transactional;
 
 /**
  * Created by ZDLegend on 2019/8/13 20:19
  */
 @Service
 public class SpouseService extends AbstractService<SpouseEntity> {
+
+    Logger log = LoggerFactory.getLogger(SpouseService.class);
 
     @Autowired
     private SpouseDao spouseDao;
@@ -31,6 +33,11 @@ public class SpouseService extends AbstractService<SpouseEntity> {
     public void startAnalysis() {
         transactionTemplate.execute(call -> {
             SpouseConst.getAllQuestionBySpouse().whenComplete((vo, throwable) -> {
+                if(throwable != null) {
+                    log.error("getAllQuestionBySpouse error", throwable);
+                    return;
+                }
+
                 SpouseConst.questionMap.forEach((k, v) -> {
                     Pair<String, String> pair = PcParser.getEarth(v);
                     QuestionParser.getInstance()
