@@ -1,7 +1,5 @@
 package com.zdl.spider.mixed.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.ResourceBundle;
 
 /**
