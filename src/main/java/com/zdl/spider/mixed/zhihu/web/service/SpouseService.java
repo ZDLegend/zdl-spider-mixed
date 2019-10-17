@@ -33,7 +33,7 @@ public class SpouseService extends AbstractService<SpouseEntity> {
     public void startAnalysis() {
         transactionTemplate.execute(call -> {
             SpouseConst.getAllQuestionBySpouse().whenComplete((vo, throwable) -> {
-                if(throwable != null) {
+                if (throwable != null) {
                     log.error("getAllQuestionBySpouse error", throwable);
                     return;
                 }

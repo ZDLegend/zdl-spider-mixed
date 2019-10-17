@@ -4,7 +4,7 @@ import java.util.ResourceBundle;
 
 /**
  * 手动获取资源配置
- *
+ * <p>
  * Created by ZDLegend on 2019/8/21 17:46
  */
 public class PropertiesUtil {
