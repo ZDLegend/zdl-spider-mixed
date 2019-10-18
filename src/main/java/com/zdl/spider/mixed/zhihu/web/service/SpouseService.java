@@ -22,7 +22,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 @Service
 public class SpouseService extends AbstractService<SpouseEntity> {
 
-    Logger log = LoggerFactory.getLogger(SpouseService.class);
+    private static final Logger log = LoggerFactory.getLogger(SpouseService.class);
 
     @Autowired
     private SpouseDao spouseDao;
